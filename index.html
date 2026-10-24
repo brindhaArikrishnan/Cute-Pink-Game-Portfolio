@@ -4,482 +4,606 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Brindha | Pink Runner Portfolio</title>
+<title>Brindha's Pink Doll Game Portfolio</title>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#ffe7f3;color:#76345d;overflow:hidden}
-button,a{cursor:pointer}
-#game{position:fixed;inset:0}
-.hud{position:fixed;top:15px;left:15px;right:15px;display:flex;justify-content:space-between;gap:10px;z-index:2;pointer-events:none}
-.pill{background:#fff0f8ed;padding:12px 16px;border-radius:18px;box-shadow:0 4px 15px #a64c7b33;font-weight:bold}
-#message{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:#5b234d77;padding:18px}
-.panel{background:#fff5fb;border:2px solid #ffb6d7;border-radius:26px;padding:28px;text-align:center;width:min(450px,100%);box-shadow:0 15px 50px #4d183955}
-h1{color:#d94f97;margin-top:0}
-button,.link{border:0;border-radius:14px;padding:12px 18px;background:#e65b9f;color:white;font-weight:bold;text-decoration:none;display:inline-block;margin:5px}
-button:hover,.link:hover{background:#c53d82}
-.hidden{display:none!important}
-#controls{position:fixed;bottom:20px;left:0;right:0;display:flex;justify-content:space-between;padding:0 22px;z-index:3;pointer-events:none}
-#controls button{pointer-events:auto;width:65px;height:60px;font-size:24px;background:#fff0f8dd;color:#a32c6b;border:2px solid #ffadd1}
-#jump{font-size:15px!important}
-#resumeOverlay{position:fixed;inset:0;background:#37152feF;z-index:10;display:flex;align-items:center;justify-content:center;padding:12px;overflow:auto}
-.resume-card{width:min(950px,100%);max-height:96vh;overflow:auto;background:#fff4fa;border-radius:22px;padding:20px;text-align:center}
-.resume-frame{width:100%;height:55vh;border:2px solid #f3a8cd;border-radius:12px;background:white}
-.resume-card h1{margin:8px}
-.resume-card p{line-height:1.5}
-small{color:#9c6081}
-@media(max-width:600px){
- .pill{padding:9px;font-size:13px}
- .resume-card{padding:12px}
- .resume-frame{height:55vh}
+:root {
+  --pink: #ec68a8;
+  --dark: #87345f;
+  --light: #fff0f7;
+  --border: #ffc0dc;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #ffe4f1;
+  color: var(--dark);
+}
+button, a { font: inherit; }
+button {
+  border: 0;
+  border-radius: 13px;
+  padding: 12px 17px;
+  color: white;
+  background: var(--pink);
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover, a:hover { filter: brightness(.95); }
+a { color: #bd397b; font-weight: bold; }
+.hidden { display: none !important; }
+
+.game {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(#ffc8e2 0%, #fff0f7 65%, #f6b6d7 100%);
+}
+.cloud {
+  position: absolute;
+  font-size: 42px;
+  opacity: .8;
+  animation: drift 14s linear infinite;
+}
+.cloud.one { top: 95px; left: 5%; }
+.cloud.two { top: 180px; left: 75%; animation-delay: -7s; }
+@keyframes drift {
+  from { transform: translateX(-15px); }
+  to { transform: translateX(35px); }
+}
+
+.topbar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 14px;
+}
+.badge {
+  background: #ffffffdc;
+  padding: 11px 14px;
+  border-radius: 15px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px #b84e8330;
+}
+.track {
+  position: relative;
+  width: min(520px, 94%);
+  height: min(63vh, 510px);
+  min-height: 340px;
+  margin: 5px auto 0;
+  overflow: hidden;
+  border: 5px solid #fff7fb;
+  border-radius: 32px;
+  background: linear-gradient(90deg,
+    #f7b2d4 0%, #f7b2d4 33%,
+    #ffd4e8 33%, #ffd4e8 66%,
+    #f7b2d4 66%, #f7b2d4 100%);
+  box-shadow: 0 15px 45px #b94e8330;
+}
+.lane-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: repeating-linear-gradient(
+    to bottom, white 0 25px, transparent 25px 48px
+  );
+  opacity: .8;
+}
+.lane-line.left { left: 33%; }
+.lane-line.right { left: 66%; }
+
+.track-decoration {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 23px;
+  pointer-events: none;
+}
+.doll {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 22px;
+  width: 90px;
+  height: 132px;
+  object-fit: contain;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 5px 3px #9d477344);
+  transition: left .13s ease;
+  animation: bounce .45s ease-in-out infinite alternate;
+}
+@keyframes bounce {
+  from { margin-bottom: 0; }
+  to { margin-bottom: 6px; }
+}
+.object {
+  position: absolute;
+  z-index: 1;
+  font-size: 35px;
+  width: 42px;
+  height: 42px;
+  text-align: center;
+  line-height: 42px;
+  left: 50%;
+  top: -50px;
+  user-select: none;
+}
+.object.coin { filter: drop-shadow(0 3px 4px #d99b19); }
+.object.obstacle { filter: drop-shadow(0 3px 3px #bd6797); }
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+}
+.controls button { min-width: 66px; font-size: 19px; }
+.hint { text-align: center; margin: 2px 12px 20px; color: #955078; }
+
+.overlay {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  background: #54203eaa;
+  overflow-y: auto;
+}
+.panel {
+  width: min(620px, 100%);
+  max-height: 94vh;
+  overflow-y: auto;
+  background: #fff7fb;
+  border: 3px solid var(--border);
+  border-radius: 25px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 15px 60px #38132955;
+}
+.panel h1 { color: #d74791; margin: 5px 0 12px; }
+.panel h2 { font-size: 20px; }
+.panel p { line-height: 1.6; }
+.skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 14px 0;
+}
+.skill {
+  padding: 8px 11px;
+  background: #ffe1ef;
+  border: 1px solid #ffc0dc;
+  border-radius: 20px;
+  font-size: 14px;
+}
+.question {
+  text-align: left;
+  padding: 15px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  margin: 15px 0;
+  line-height: 1.6;
+}
+.answer { color: #21824d; font-weight: bold; }
+.project {
+  text-align: left;
+  background: white;
+  border: 1px solid #f5c5dc;
+  padding: 12px;
+  border-radius: 13px;
+  margin: 10px 0;
+}
+.project p { margin: 6px 0; }
+.actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.secondary { background: #ad6791; }
+.resume-frame {
+  width: 100%;
+  height: 50vh;
+  min-height: 280px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: white;
+}
+.footer { font-size: 13px; color: #9d6c88; }
+
+@media(max-width:480px) {
+  .topbar { padding: 9px; }
+  .badge { font-size: 12px; padding: 9px; }
+  .track { min-height: 340px; }
+  .doll { width: 78px; height: 120px; }
+  .panel { padding: 17px; }
 }
 </style>
 </head>
 
 <body>
-<div id="game"></div>
 
-<div class="hud">
-  <div class="pill">🌸 Pink Runner</div>
-  <div class="pill">🪙 Coins: <span id="score">0</span></div>
-  <div class="pill">🏆 Level: <span id="level">1</span></div>
-</div>
+<div class="game">
+  <div class="cloud one">☁️</div>
+  <div class="cloud two">☁️</div>
 
-<div id="message">
-  <div class="panel">
-    <h1>🌸 Brindha's Pink World 🌸</h1>
-    <p>Run through the magical pink world, collect coins and avoid obstacles!</p>
-    <p>⬅️ ➡️ Move · ⬆️ Jump</p>
-    <button id="startBtn">Start Game 🎮</button>
-    <button id="showResumeBtn">View My Resume 💼</button>
-    <p><small>Created by Brindha A · Aspiring Full Stack Developer</small></p>
-  </div>
-</div>
+  <header class="topbar">
+    <div class="badge">🎀 Pink Doll Runner</div>
+    <div class="badge">🪙 Coins: <span id="score">0</span></div>
+    <div class="badge">🌸 Level: <span id="level">1</span>/3</div>
+  </header>
 
-<div id="controls">
-  <div>
+  <main class="track" id="track">
+    <div class="lane-line left"></div>
+    <div class="lane-line right"></div>
+    <div class="track-decoration" id="decoration">🌸 🌷 🌸 🌷 🌸</div>
+
+    <img
+      id="doll"
+      class="doll"
+      alt="Cute doll game character"
+      src="https://api.dicebear.com/9.x/adventurer/svg?seed=Brindha&backgroundColor=ffdfef"
+    />
+  </main>
+
+  <div class="controls">
     <button id="leftBtn" aria-label="Move left">⬅️</button>
+    <button id="jumpBtn">⬆️ Jump</button>
     <button id="rightBtn" aria-label="Move right">➡️</button>
   </div>
-  <button id="jump" aria-label="Jump">JUMP ⬆️</button>
+  <p class="hint">Use ← → arrow keys to move and Space to jump. Collect coins! ✨</p>
 </div>
 
-<div id="resumeOverlay" class="hidden">
-  <div class="resume-card">
-    <h1>🎉 Game Over! Welcome to My Portfolio 💗</h1>
-    <h2>Brindha A | Full Stack Developer</h2>
-    <p>Thank you for playing my game! Here's my professional resume.</p>
-
-    <iframe class="resume-frame" src="resume.pdf"
-      title="Brindha A Resume"></iframe>
-
-    <p>
-      <a class="link" href="resume.pdf" target="_blank">📄 Open Resume PDF</a>
-      <a class="link" href="resume.pdf" download>⬇️ Download Resume</a>
-    </p>
-
-    <h2>💻 My Projects</h2>
-    <p>
-      <a class="link" href="https://github.com/brindhaArikrishnan/Campus-event-manager" target="_blank">CampusConnect</a>
-      <a class="link" href="https://github.com/brindhaArikrishnan/AI-Teacher" target="_blank">AI Teacher</a>
-      <a class="link" href="https://github.com/brindhaArikrishnan/CodeOrbit_PersonalPortfolio" target="_blank">Portfolio Project</a>
-    </p>
-
-    <h2>🔗 Find Me Online</h2>
-    <p>
-      <a class="link" href="https://github.com/brindhaArikrishnan" target="_blank">GitHub Profile</a>
-      <a class="link" href="https://www.linkedin.com/in/brindha-a-250955338/" target="_blank">LinkedIn</a>
-    </p>
-
-    <button id="restartBtn">🔄 Play Again</button>
+<!-- START SCREEN -->
+<div class="overlay" id="startScreen">
+  <div class="panel">
+    <h1>🌸 Brindha's Pink World 🌸</h1>
+    <img
+      src="https://api.dicebear.com/9.x/adventurer/svg?seed=Brindha&backgroundColor=ffdfef"
+      alt="Cute doll"
+      width="105"
+    />
+    <p>Help the doll collect coins and explore my developer portfolio!</p>
+    <p>🎮 Three levels · 💻 Coding questions · 📄 Resume</p>
+    <div class="actions">
+      <button id="startBtn">Start Game 🎀</button>
+      <button class="secondary" id="viewResumeBtn">View Resume</button>
+    </div>
+    <p class="footer">Created by Brindha A · Aspiring Full Stack Developer</p>
   </div>
 </div>
 
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+<!-- LEVEL INFORMATION -->
+<div class="overlay hidden" id="levelScreen">
+  <div class="panel">
+    <h1 id="levelTitle">🌸 Level Complete!</h1>
+    <p id="levelIntro"></p>
+
+    <h2>💻 My Resume Skills</h2>
+    <div class="skill-list" id="skills"></div>
+
+    <div class="question">
+      <strong>🧠 Coding Question</strong>
+      <p id="questionText"></p>
+      <p class="answer" id="answerText"></p>
+    </div>
+
+    <h2>🚀 My Project</h2>
+    <div class="project">
+      <strong id="projectName"></strong>
+      <p id="projectDescription"></p>
+      <a id="projectLink" href="#" target="_blank" rel="noopener">View Project on GitHub ↗</a>
+    </div>
+
+    <div class="actions">
+      <button id="continueBtn">Next Level ➜</button>
+      <button class="secondary" id="levelResumeBtn">View Resume</button>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL RESUME SCREEN -->
+<div class="overlay hidden" id="resumeScreen">
+  <div class="panel">
+    <h1>👑 You Finished the Pink World!</h1>
+    <h2>Brindha A | Full Stack Developer</h2>
+    <p>Thanks for playing! Explore my resume, skills and projects. 💗</p>
+
+    <iframe
+      class="resume-frame"
+      id="resumeFrame"
+      title="Brindha A Resume"
+      src="resume.pdf"
+    ></iframe>
+
+    <p id="pdfMessage" class="footer">
+      If the PDF does not appear, upload resume.pdf to your GitHub repository's main folder.
+    </p>
+
+    <div class="actions">
+      <a class="link" href="resume.pdf" target="_blank" rel="noopener">📄 Open Resume PDF</a>
+      <a class="link" href="resume.pdf" download>⬇️ Download Resume</a>
+    </div>
+
+    <h2>🔗 Find Me Online</h2>
+    <div class="actions">
+      <a class="link" href="https://github.com/brindhaArikrishnan" target="_blank" rel="noopener">GitHub</a>
+      <a class="link" href="https://www.linkedin.com/in/brindha-a-250955338/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+
+    <button id="playAgainBtn">🔄 Play Again</button>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const levelData = [
+  {
+    title: "🌸 Level 1 Complete — Web Development!",
+    intro: "You finished the Pink Garden! Here are my web development skills.",
+    skills: ["HTML", "CSS", "JavaScript", "Responsive Web Design"],
+    question: "Which HTML tag creates a hyperlink?",
+    answer: "Answer: <a> — Example: <a href='page.html'>Open page</a>",
+    project: "CodeOrbit Personal Portfolio",
+    description: "A personal portfolio website project.",
+    link: "https://github.com/brindhaArikrishnan/CodeOrbit_PersonalPortfolio"
+  },
+  {
+    title: "🦋 Level 2 Complete — Programming!",
+    intro: "You reached the Magic Garden! Let's look at programming and backend skills.",
+    skills: ["Java", "Python", "Node.js", "Express.js", "MySQL"],
+    question: "In JavaScript, which keyword declares a variable that can be reassigned?",
+    answer: "Answer: let — Example: let score = 10; score = 20;",
+    project: "AI Teacher",
+    description: "An AI-focused educational web application project.",
+    link: "https://github.com/brindhaArikrishnan/AI-Teacher"
+  },
+  {
+    title: "👑 Level 3 Complete — Full Stack Developer!",
+    intro: "You completed all three levels! Here are my project and full-stack skills.",
+    skills: ["Frontend", "Backend", "REST APIs", "Git", "GitHub", "Database Basics"],
+    question: "Which Node.js framework is commonly used to build web APIs?",
+    answer: "Answer: Express.js — Example: app.get('/api', (req, res) => res.json({ message: 'Hello' }));",
+    project: "CampusConnect — Campus Event & Hackathon Manager",
+    description: "A college event and hackathon management project with event and registration features.",
+    link: "https://github.com/brindhaArikrishnan/Campus-event-manager"
   }
+];
+
+let currentLevel = 0;
+let score = 0;
+let lane = 1;
+let running = false;
+let jumping = false;
+let jumpTimer = 0;
+let objects = [];
+let spawnTimer = 0;
+let lastTime = 0;
+let levelTime = 0;
+const LEVEL_DURATION = 18;
+
+const track = $("track");
+const doll = $("doll");
+
+function laneX(index) {
+  const width = track.clientWidth;
+  return width * (index + 0.5) / 3;
 }
-</script>
 
-<script type="module">
-import * as THREE from "three";
+function positionDoll() {
+  doll.style.left = laneX(lane) + "px";
+}
 
-const container = document.getElementById("game");
-const scoreText = document.getElementById("score");
-const levelText = document.getElementById("level");
-const message = document.getElementById("message");
-const resumeOverlay = document.getElementById("resumeOverlay");
+function move(direction) {
+  if (!running) return;
+  lane = Math.max(0, Math.min(2, lane + direction));
+  positionDoll();
+}
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color("#ffc9e3");
-scene.fog = new THREE.Fog("#ffc9e3", 22, 95);
+function jump() {
+  if (!running || jumping) return;
+  jumping = true;
+  jumpTimer = 0.65;
+  doll.style.transform = "translateX(-50%) translateY(-65px) scale(1.08)";
+}
 
-const camera = new THREE.PerspectiveCamera(
-  65, window.innerWidth/window.innerHeight, 0.1, 150
-);
-camera.position.set(0, 5.2, 9);
-camera.lookAt(0, 1, -5);
+function resetObjects() {
+  objects.forEach(obj => obj.element.remove());
+  objects = [];
+  spawnTimer = 0;
+}
 
-const renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(window.innerWidth,window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-renderer.shadowMap.enabled = true;
-container.appendChild(renderer.domElement);
+function startGame() {
+  $("startScreen").classList.add("hidden");
+  $("levelScreen").classList.add("hidden");
+  $("resumeScreen").classList.add("hidden");
 
-scene.add(new THREE.HemisphereLight(0xffffff,0xc15c9b,2));
-const sun = new THREE.DirectionalLight(0xffffff,2.5);
-sun.position.set(-4,10,7);
-sun.castShadow = true;
-scene.add(sun);
+  currentLevel = 0;
+  score = 0;
+  $("score").textContent = score;
+  resetObjects();
+  startLevel();
+}
 
-const mat = (color,roughness=0.8) =>
-  new THREE.MeshStandardMaterial({color,roughness});
+function startLevel() {
+  running = true;
+  levelTime = 0;
+  lane = 1;
+  jumping = false;
+  doll.style.transform = "translateX(-50%)";
+  positionDoll();
+  $("level").textContent = currentLevel + 1;
+  $("decoration").textContent =
+    currentLevel === 0 ? "🌸 🌷 🌸 🌷 🌸" :
+    currentLevel === 1 ? "🦋 🌳 🦋 🌳 🦋" :
+    "👑 🏰 👑 🏰 👑";
+  lastTime = performance.now();
+  requestAnimationFrame(gameLoop);
+}
 
-const floor = new THREE.Mesh(
-  new THREE.PlaneGeometry(200,200),
-  mat("#f5a9cf")
-);
-floor.rotation.x = -Math.PI/2;
-floor.position.y = -0.05;
-floor.receiveShadow = true;
-scene.add(floor);
+function spawnObject() {
+  const isCoin = Math.random() < 0.65;
+  const laneIndex = Math.floor(Math.random() * 3);
+  const element = document.createElement("div");
 
-// Three running lanes
-const laneLines = [];
-for(let z=-100;z<20;z+=5){
-  for(const x of [-1.5,1.5]){
-    const line = new THREE.Mesh(
-      new THREE.BoxGeometry(0.045,0.02,2.2),
-      mat("#fff0f8")
-    );
-    line.position.set(x,0.015,z);
-    scene.add(line);
-    laneLines.push(line);
+  element.className = "object " + (isCoin ? "coin" : "obstacle");
+  element.textContent = isCoin ? "🪙" : "🌵";
+  element.style.left = laneX(laneIndex) + "px";
+  element.style.top = "-45px";
+  track.appendChild(element);
+
+  objects.push({
+    element,
+    lane: laneIndex,
+    y: -45,
+    coin: isCoin,
+    checked: false
+  });
+}
+
+function gameLoop(now) {
+  if (!running) return;
+
+  const delta = Math.min((now - lastTime) / 1000, 0.04);
+  lastTime = now;
+  levelTime += delta;
+  spawnTimer += delta;
+
+  if (spawnTimer > 0.72) {
+    spawnObject();
+    spawnTimer = 0;
   }
-}
 
-// Decorative pink trees
-const trees = [];
-for(let i=0;i<28;i++){
-  for(const side of [-1,1]){
-    const group = new THREE.Group();
-    const trunk = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.12,0.18,1.5,8),
-      mat("#a65b78")
-    );
-    trunk.position.y=0.75;
-    group.add(trunk);
-
-    const top = new THREE.Mesh(
-      new THREE.SphereGeometry(0.75,12,10),
-      mat(i%2 ? "#ff83bb" : "#e96bb0")
-    );
-    top.position.y=1.8;
-    group.add(top);
-    group.position.set(side*(4.5+Math.random()*2),0,-i*4-5);
-    scene.add(group);
-    trees.push(group);
+  if (jumping) {
+    jumpTimer -= delta;
+    if (jumpTimer <= 0) {
+      jumping = false;
+      doll.style.transform = "translateX(-50%)";
+    }
   }
-}
 
-// Simple 3D girl avatar made from shapes
-const girl = new THREE.Group();
-scene.add(girl);
-girl.position.set(0,0,2);
+  const speed = 180 + currentLevel * 35;
+  const dollY = track.clientHeight - 155;
 
-const skin = mat("#ffcfad");
-const hair = mat("#533047");
-const dress = mat("#ec4e9b");
-const white = mat("#fff4fa");
-const dark = mat("#42253b");
+  objects.forEach(obj => {
+    obj.y += speed * delta;
+    obj.element.style.top = obj.y + "px";
 
-function sphere(parent,r,color,x,y,z,sx=1,sy=1,sz=1){
-  const m = new THREE.Mesh(new THREE.SphereGeometry(r,16,12),color);
-  m.position.set(x,y,z);
-  m.scale.set(sx,sy,sz);
-  m.castShadow=true;
-  parent.add(m);
-  return m;
-}
+    const closeToDoll = obj.y > dollY - 12 && obj.y < dollY + 55;
 
-function limb(parent,r1,r2,length,color,x,y,z){
-  const m = new THREE.Mesh(
-    new THREE.CylinderGeometry(r1,r2,length,10),
-    color
-  );
-  m.position.set(x,y,z);
-  m.castShadow=true;
-  parent.add(m);
-  return m;
-}
+    if (!obj.checked && closeToDoll && obj.lane === lane) {
+      obj.checked = true;
 
-const body = new THREE.Group();
-girl.add(body);
+      if (obj.coin) {
+        score++;
+        $("score").textContent = score;
+        obj.element.textContent = "✨";
+      } else if (!jumping) {
+        // Collision costs a point, but the game continues.
+        score = Math.max(0, score - 1);
+        $("score").textContent = score;
+        obj.element.textContent = "💫";
+      }
+    }
+  });
 
-sphere(body,0.34,skin,0,1.65,0,0.82,1,0.75);
-sphere(body,0.45,dress,0,1.02,0,1,1.15,0.8);
-sphere(body,0.3,skin,0,2.2,0,0.95,1.05,0.9);
-sphere(body,0.33,hair,0,2.4,-0.06,1.05,0.95,0.9);
-sphere(body,0.18,hair,-0.24,2.2,0.15,0.6,1.1,0.7);
-sphere(body,0.18,hair,0.24,2.2,0.15,0.6,1.1,0.7);
+  objects = objects.filter(obj => {
+    if (obj.y > track.clientHeight + 50) {
+      obj.element.remove();
+      return false;
+    }
+    return true;
+  });
 
-sphere(body,0.045,dark,-0.11,2.23,0.27);
-sphere(body,0.045,dark,0.11,2.23,0.27);
-sphere(body,0.025,white,-0.10,2.25,0.3);
-sphere(body,0.025,white,0.12,2.25,0.3);
-sphere(body,0.04,mat("#ef7b94"),0,2.12,0.29,1,0.7,0.7);
-
-// Hair bow
-sphere(body,0.12,mat("#ffdf78"),0,2.78,0,1,0.55,0.6);
-sphere(body,0.1,mat("#ff7bb9"),-0.1,2.78,0.02);
-sphere(body,0.1,mat("#ff7bb9"),0.1,2.78,0.02);
-
-const arms=[];
-for(const side of [-1,1]){
-  const arm = new THREE.Group();
-  arm.position.set(side*0.34,1.55,0);
-  body.add(arm);
-  const a=limb(arm,0.09,0.12,0.55,skin,side*0.12,-0.22,0);
-  a.rotation.z=side*-0.4;
-  sphere(arm,0.1,skin,side*0.22,-0.48,0);
-  arms.push(arm);
-}
-
-const legs=[];
-for(const side of [-1,1]){
-  const leg=new THREE.Group();
-  leg.position.set(side*0.17,0.65,0);
-  girl.add(leg);
-  limb(leg,0.11,0.13,0.55,skin,0,-0.22,0);
-  const shoe=new THREE.Mesh(
-    new THREE.SphereGeometry(0.16,12,10),
-    mat("#8b426b")
-  );
-  shoe.position.set(0,-0.53,0.1);
-  shoe.scale.set(1,0.65,1.4);
-  shoe.castShadow=true;
-  leg.add(shoe);
-  legs.push(leg);
-}
-
-// Obstacles and coins
-const obstacles=[];
-const coins=[];
-const coinMat=mat("#ffd65a",0.3);
-const obstacleMat=mat("#b84b94");
-
-function makeObstacle(z){
-  const group=new THREE.Group();
-  const block=new THREE.Mesh(
-    new THREE.BoxGeometry(0.8,0.9,0.7),
-    obstacleMat
-  );
-  block.position.y=0.45;
-  block.castShadow=true;
-  group.add(block);
-
-  const heart=sphere(group,0.13,mat("#fff0f7"),0,0.53,0.37,1.2,1,0.5);
-  group.position.set([-2,0,2][Math.floor(Math.random()*3)],0,z);
-  scene.add(group);
-  obstacles.push(group);
-}
-
-function makeCoin(z){
-  const coin=new THREE.Mesh(
-    new THREE.TorusGeometry(0.27,0.09,10,20),
-    coinMat
-  );
-  coin.position.set([-2,0,2][Math.floor(Math.random()*3)],1.25,z);
-  coin.castShadow=true;
-  scene.add(coin);
-  coins.push(coin);
-}
-
-for(let i=0;i<9;i++){
-  makeObstacle(-15-i*12);
-  makeCoin(-10-i*12);
-}
-
-let running=false;
-let lane=1;
-let score=0;
-let level=1;
-let elapsed=0;
-let jump=0;
-let jumpVelocity=0;
-let lastTime=0;
-
-function moveLane(direction){
-  if(!running)return;
-  lane=Math.max(0,Math.min(2,lane+direction));
-}
-
-function doJump(){
-  if(running && jump===0){
-    jumpVelocity=7;
+  if (levelTime >= LEVEL_DURATION) {
+    running = false;
+    resetObjects();
+    showLevelScreen();
+    return;
   }
+
+  requestAnimationFrame(gameLoop);
 }
 
-document.addEventListener("keydown",e=>{
-  if(["ArrowLeft","a","A"].includes(e.key))moveLane(-1);
-  if(["ArrowRight","d","D"].includes(e.key))moveLane(1);
-  if(["ArrowUp"," ","w","W"].includes(e.key)){
-    e.preventDefault();
-    doJump();
+function showLevelScreen() {
+  const data = levelData[currentLevel];
+
+  $("levelTitle").textContent = data.title;
+  $("levelIntro").textContent = data.intro;
+  $("questionText").textContent = data.question;
+  $("answerText").textContent = data.answer;
+  $("projectName").textContent = data.project;
+  $("projectDescription").textContent = data.description;
+  $("projectLink").href = data.link;
+
+  $("skills").replaceChildren();
+  data.skills.forEach(skill => {
+    const span = document.createElement("span");
+    span.className = "skill";
+    span.textContent = skill;
+    $("skills").appendChild(span);
+  });
+
+  if (currentLevel === levelData.length - 1) {
+    $("continueBtn").textContent = "Finish & View Resume 📄";
+  } else {
+    $("continueBtn").textContent = "Next Level ➜";
+  }
+
+  $("levelScreen").classList.remove("hidden");
+}
+
+function showResume() {
+  running = false;
+  $("startScreen").classList.add("hidden");
+  $("levelScreen").classList.add("hidden");
+  $("resumeScreen").classList.remove("hidden");
+}
+
+$("startBtn").addEventListener("click", startGame);
+$("viewResumeBtn").addEventListener("click", showResume);
+$("levelResumeBtn").addEventListener("click", showResume);
+
+$("continueBtn").addEventListener("click", () => {
+  $("levelScreen").classList.add("hidden");
+
+  if (currentLevel >= levelData.length - 1) {
+    showResume();
+  } else {
+    currentLevel++;
+    startLevel();
   }
 });
 
-document.getElementById("leftBtn").onclick=()=>moveLane(-1);
-document.getElementById("rightBtn").onclick=()=>moveLane(1);
-document.getElementById("jump").onclick=doJump;
+$("playAgainBtn").addEventListener("click", startGame);
+$("leftBtn").addEventListener("click", () => move(-1));
+$("rightBtn").addEventListener("click", () => move(1));
+$("jumpBtn").addEventListener("click", jump);
 
-document.getElementById("showResumeBtn").onclick=showResume;
-document.getElementById("startBtn").onclick=startGame;
-document.getElementById("restartBtn").onclick=()=>{
-  resumeOverlay.classList.add("hidden");
-  startGame();
-};
-
-function startGame(){
-  score=0;
-  level=1;
-  elapsed=0;
-  lane=1;
-  jump=0;
-  jumpVelocity=0;
-  girl.position.set(0,0,2);
-
-  obstacles.forEach((o,i)=>{
-    o.visible=true;
-    o.position.z=-15-i*12;
-    o.position.x=[-2,0,2][Math.floor(Math.random()*3)];
-  });
-  coins.forEach((c,i)=>{
-    c.visible=true;
-    c.position.z=-10-i*12;
-    c.position.x=[-2,0,2][Math.floor(Math.random()*3)];
-  });
-
-  scoreText.textContent=score;
-  levelText.textContent=level;
-  message.classList.add("hidden");
-  resumeOverlay.classList.add("hidden");
-  running=true;
-  lastTime=performance.now();
-}
-
-function showResume(){
-  running=false;
-  message.classList.add("hidden");
-  resumeOverlay.classList.remove("hidden");
-}
-
-function endGame(){
-  if(!running)return;
-  running=false;
-  showResume();
-}
-
-function update(delta){
-  elapsed+=delta;
-
-  // Finish after 3 levels (60 seconds), or when an obstacle is hit
-  level=Math.min(3,Math.floor(elapsed/20)+1);
-  levelText.textContent=level;
-
-  const speed=11+(level-1)*2;
-  const targetX=[-2,0,2][lane];
-  girl.position.x += (targetX-girl.position.x)*Math.min(1,delta*10);
-
-  // Jump physics
-  if(jumpVelocity!==0 || jump>0){
-    jumpVelocity-=18*delta;
-    jump+=jumpVelocity*delta;
-    if(jump<=0){
-      jump=0;
-      jumpVelocity=0;
-    }
+document.addEventListener("keydown", event => {
+  if (event.key === "ArrowLeft" || event.key.toLowerCase() === "a") {
+    move(-1);
   }
-  girl.position.y=Math.max(0,jump);
-
-  // Running animation
-  const t=elapsed*12;
-  legs[0].rotation.x=Math.sin(t)*0.7;
-  legs[1].rotation.x=Math.sin(t+Math.PI)*0.7;
-  arms[0].rotation.x=Math.sin(t+Math.PI)*0.4;
-  arms[1].rotation.x=Math.sin(t)*0.4;
-  body.rotation.z=Math.sin(t)*0.035;
-
-  laneLines.forEach(line=>{
-    line.position.z+=speed*delta;
-    if(line.position.z>8)line.position.z-=110;
-  });
-
-  trees.forEach(tree=>{
-    tree.position.z+=speed*delta*0.75;
-    if(tree.position.z>12)tree.position.z-=112;
-  });
-
-  for(const coin of coins){
-    if(!coin.visible)continue;
-    coin.position.z+=speed*delta;
-    coin.rotation.y+=delta*3;
-
-    if(coin.position.z>1 && coin.position.z<3 &&
-       Math.abs(coin.position.x-girl.position.x)<0.75){
-      coin.visible=false;
-      score++;
-      scoreText.textContent=score;
-    }
-
-    if(coin.position.z>8){
-      coin.position.z-=108;
-      coin.position.x=[-2,0,2][Math.floor(Math.random()*3)];
-      coin.visible=true;
-    }
+  if (event.key === "ArrowRight" || event.key.toLowerCase() === "d") {
+    move(1);
   }
-
-  for(const obstacle of obstacles){
-    if(!obstacle.visible)continue;
-    obstacle.position.z+=speed*delta;
-
-    const close=Math.abs(obstacle.position.z-girl.position.z)<0.8;
-    const sameLane=Math.abs(obstacle.position.x-girl.position.x)<0.7;
-
-    if(close && sameLane && jump<0.65){
-      endGame();
-      return;
-    }
-
-    if(obstacle.position.z>8){
-      obstacle.position.z-=108;
-      obstacle.position.x=[-2,0,2][Math.floor(Math.random()*3)];
-    }
+  if (event.code === "Space" || event.key === "ArrowUp") {
+    event.preventDefault();
+    jump();
   }
-
-  if(elapsed>=60){
-    endGame();
-  }
-}
-
-function animate(now){
-  requestAnimationFrame(animate);
-  const delta=Math.min((now-lastTime)/1000||0,0.04);
-  lastTime=now;
-
-  if(running)update(delta);
-
-  renderer.render(scene,camera);
-}
-requestAnimationFrame(animate);
-
-window.addEventListener("resize",()=>{
-  camera.aspect=window.innerWidth/window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth,window.innerHeight);
 });
+
+window.addEventListener("resize", positionDoll);
+positionDoll();
 </script>
 </body>
 </html>
