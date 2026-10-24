@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fff0f6">
+  <meta name="description" content="A cute pink game portfolio with three playable levels.">
+  <title>Cute Pink Game Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="navbar">
+    <a href="#home" class="logo">♡ Brindha.dev</a>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#game">Play Game</a>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <span class="eyebrow">✿ DEVELOPER • DREAMER • GAMER ✿</span>
+        <h1>Welcome to my<br><span>little pink world!</span></h1>
+        <p>I'm Brindha, an IT student who loves building creative websites and fun digital experiences.</p>
+        <a class="btn primary" href="#game">Play my game ✨</a>
+        <a class="btn secondary" href="#projects">Explore projects</a>
+      </div>
+      <div class="hero-art" aria-label="Pink flower and stars">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="hero-flower">🌸</div>
+        <span class="float-star star-a">✦</span>
+        <span class="float-star star-b">♡</span>
+        <span class="float-star star-c">✧</span>
+        <span class="float-star star-d">⭐</span>
+      </div>
+    </section>
+
+    <section class="game-section section" id="game">
+      <div class="section-heading">
+        <span class="eyebrow">YOUR ADVENTURE STARTS HERE</span>
+        <h2>The Pink World <span>Adventure</span> 🎮</h2>
+        <p>Collect every star, dodge obstacles and unlock all three worlds!</p>
+      </div>
+
+      <div class="game-shell">
+        <div class="game-topbar">
+          <div>
+            <span class="mini-label">CURRENT WORLD</span>
+            <h3 id="levelTitle">🌸 Level 1 — Pink Garden</h3>
+          </div>
+          <div class="stats">
+            <span>⭐ <b id="score">0</b></span>
+            <span>💗 <b id="starCount">0 / 5</b></span>
+          </div>
+        </div>
+
+        <div class="progress-track">
+          <div id="progressBar"></div>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="gameCanvas" width="900" height="500"
+            aria-label="Game world. Use arrow keys or WASD to move the character.">
+          </canvas>
+
+          <div class="screen" id="levelScreen">
+            <div class="screen-card">
+              <div class="screen-icon">🌸</div>
+              <span class="eyebrow">CHOOSE YOUR ADVENTURE</span>
+              <h2>Choose a Level</h2>
+              <p>Collect all the stars and find the glowing exit!</p>
+              <div class="level-grid">
+                <button class="level-card unlocked" data-level="0">
+                  <span class="level-emoji">🌷</span>
+                  <b>Level 1</b>
+                  <small>Pink Garden</small>
+                  <span class="level-status" id="status0">PLAY NOW</span>
+                </button>
+                <button class="level-card locked" data-level="1" disabled>
+                  <span class="level-emoji">🦋</span>
+                  <b>Level 2</b>
+                  <small>Magic Forest</small>
+                  <span class="level-status" id="status1">🔒 LOCKED</span>
+                </button>
+                <button class="level-card locked" data-level="2" disabled>
+                  <span class="level-emoji">👑</span>
+                  <b>Level 3</b>
+                  <small>Princess Castle</small>
+                  <span class="level-status" id="status2">🔒 LOCKED</span>
+                </button>
+              </div>
+              <p class="small-note">⌨️ Arrow keys / WASD · 📱 Touch controls</p>
+              <button class="btn secondary" id="resetProgress">Reset all progress</button>
+            </div>
+          </div>
+
+          <div class="screen hidden" id="messageScreen">
+            <div class="screen-card message-card">
+              <div class="screen-icon" id="messageIcon">🌟</div>
+              <span class="eyebrow" id="messageEyebrow">LEVEL COMPLETE</span>
+              <h2 id="messageTitle">Amazing!</h2>
+              <p id="messageText">You collected every star!</p>
+              <div class="message-buttons">
+                <button class="btn primary" id="primaryAction">Next level ✨</button>
+                <button class="btn secondary" id="menuAction">Level menu</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="game-controls">
+          <div class="control-info">
+            <b>How to play</b>
+            <span>Move with arrows or WASD · Collect ⭐ · Reach the exit 🚪</span>
+          </div>
+          <div class="game-buttons">
+            <button class="icon-btn" id="soundBtn" aria-label="Toggle sound">🔊 Sound</button>
+            <button class="icon-btn" id="restartBtn">↻ Restart</button>
+            <button class="icon-btn" id="levelMenuBtn">☰ Levels</button>
+          </div>
+        </div>
+
+        <div class="mobile-controls" aria-label="Touch controls">
+          <button data-dir="up" aria-label="Move up">▲</button>
+          <div class="horizontal-controls">
+            <button data-dir="left" aria-label="Move left">◀</button>
+            <button data-dir="down" aria-label="Move down">▼</button>
+            <button data-dir="right" aria-label="Move right">▶</button>
+          </div>
+        </div>
+      </div>
+      <p class="game-hint">💡 Hint: The exit opens only after you collect every star in the level.</p>
+    </section>
+
+    <section class="section about-section" id="about">
+      <div class="section-heading">
+        <span class="eyebrow">A LITTLE ABOUT ME</span>
+        <h2>Hi, I'm <span>Brindha!</span> 💗</h2>
+      </div>
+      <div class="about-card">
+        <div class="about-icon">👩🏻‍💻</div>
+        <div>
+          <h3>IT Student & Aspiring Full Stack Developer</h3>
+          <p>I'm an Information Technology student passionate about web development, creative projects and learning new technologies. I enjoy turning ideas into useful and beautiful digital experiences.</p>
+          <p class="tag-list"><span>Curious learner</span><span>Creative thinker</span><span>Future developer</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="skills">
+      <div class="section-heading">
+        <span class="eyebrow">WHAT I WORK WITH</span>
+        <h2>My <span>Skills</span> ✨</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card">🌐 <b>HTML & CSS</b><small>Web structure and design</small></div>
+        <div class="skill-card">⚡ <b>JavaScript</b><small>Interactive experiences</small></div>
+        <div class="skill-card">🟢 <b>Node.js & Express</b><small>Backend fundamentals</small></div>
+        <div class="skill-card">🗄️ <b>MySQL & MongoDB</b><small>Database basics</small></div>
+        <div class="skill-card">☕ <b>Java & Python</b><small>Programming</small></div>
+        <div class="skill-card">🐙 <b>Git & GitHub</b><small>Version control</small></div>
+      </div>
+    </section>
+
+    <section class="section projects-section" id="projects">
+      <div class="section-heading">
+        <span class="eyebrow">THINGS I'VE BUILT</span>
+        <h2>Featured <span>Projects</span> 🌷</h2>
+      </div>
+      <div class="projects-grid">
+        <article class="project-card">
+          <div class="project-art art-one">🎓</div>
+          <div class="project-body">
+            <span class="project-type">MERN PROJECT</span>
+            <h3>CampusConnect</h3>
+            <p>A campus event and hackathon management project for exploring events and registrations.</p>
+            <div class="tag-list"><span>React</span><span>Node.js</span><span>MongoDB</span></div>
+            <a href="https://github.com/brindhaArikrishnan/Campus-event-manager" target="_blank" rel="noopener noreferrer">View on GitHub ↗</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-art art-two">🤖</div>
+          <div class="project-body">
+            <span class="project-type">EDTECH PROJECT</span>
+            <h3>AI Teacher</h3>
+            <p>An educational web application concept designed to support learning with AI features.</p>
+            <div class="tag-list"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+            <a href="https://github.com/brindhaArikrishnan/AI-Teacher" target="_blank" rel="noopener noreferrer">View on GitHub ↗</a>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="project-art art-three">🎮</div>
+          <div class="project-body">
+            <span class="project-type">CREATIVE WEB PROJECT</span>
+            <h3>Cute Pink Game Portfolio</h3>
+            <p>A personal portfolio combined with a three-level collectible-star adventure game.</p>
+            <div class="tag-list"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+            <a href="https://github.com/brindhaArikrishnan/CodeOrbit_PersonalPortfolio" target="_blank" rel="noopener noreferrer">My portfolio repo ↗</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div class="contact-card">
+        <div class="section-heading">
+          <span class="eyebrow">LET'S CONNECT</span>
+          <h2>Let's build something <span>lovely!</span> 💌</h2>
+          <p>I'm always happy to learn, collaborate and explore new ideas.</p>
+        </div>
+        <div class="contact-links">
+          <a class="btn primary" href="https://github.com/brindhaArikrishnan" target="_blank" rel="noopener noreferrer">🐙 GitHub</a>
+          <a class="btn secondary" href="https://www.linkedin.com/in/brindha-a-250955338/" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a>
+          <a class="btn secondary" href="resume.pdf" target="_blank" rel="noopener noreferrer">📄 My Resume</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Made with ♡ by Brindha · Keep learning, keep blooming 🌸</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
