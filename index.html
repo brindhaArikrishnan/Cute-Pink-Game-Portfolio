@@ -2,231 +2,484 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#fff0f6">
-  <meta name="description" content="A cute pink game portfolio with three playable levels.">
-  <title>Cute Pink Game Portfolio</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brindha | Pink Runner Portfolio</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#ffe7f3;color:#76345d;overflow:hidden}
+button,a{cursor:pointer}
+#game{position:fixed;inset:0}
+.hud{position:fixed;top:15px;left:15px;right:15px;display:flex;justify-content:space-between;gap:10px;z-index:2;pointer-events:none}
+.pill{background:#fff0f8ed;padding:12px 16px;border-radius:18px;box-shadow:0 4px 15px #a64c7b33;font-weight:bold}
+#message{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;background:#5b234d77;padding:18px}
+.panel{background:#fff5fb;border:2px solid #ffb6d7;border-radius:26px;padding:28px;text-align:center;width:min(450px,100%);box-shadow:0 15px 50px #4d183955}
+h1{color:#d94f97;margin-top:0}
+button,.link{border:0;border-radius:14px;padding:12px 18px;background:#e65b9f;color:white;font-weight:bold;text-decoration:none;display:inline-block;margin:5px}
+button:hover,.link:hover{background:#c53d82}
+.hidden{display:none!important}
+#controls{position:fixed;bottom:20px;left:0;right:0;display:flex;justify-content:space-between;padding:0 22px;z-index:3;pointer-events:none}
+#controls button{pointer-events:auto;width:65px;height:60px;font-size:24px;background:#fff0f8dd;color:#a32c6b;border:2px solid #ffadd1}
+#jump{font-size:15px!important}
+#resumeOverlay{position:fixed;inset:0;background:#37152feF;z-index:10;display:flex;align-items:center;justify-content:center;padding:12px;overflow:auto}
+.resume-card{width:min(950px,100%);max-height:96vh;overflow:auto;background:#fff4fa;border-radius:22px;padding:20px;text-align:center}
+.resume-frame{width:100%;height:55vh;border:2px solid #f3a8cd;border-radius:12px;background:white}
+.resume-card h1{margin:8px}
+.resume-card p{line-height:1.5}
+small{color:#9c6081}
+@media(max-width:600px){
+ .pill{padding:9px;font-size:13px}
+ .resume-card{padding:12px}
+ .resume-frame{height:55vh}
+}
+</style>
 </head>
+
 <body>
-  <header class="navbar">
-    <a href="#home" class="logo">♡ Brindha.dev</a>
-    <nav>
-      <a href="#home">Home</a>
-      <a href="#game">Play Game</a>
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
+<div id="game"></div>
 
-  <main>
-    <section class="hero" id="home">
-      <div class="hero-copy">
-        <span class="eyebrow">✿ DEVELOPER • DREAMER • GAMER ✿</span>
-        <h1>Welcome to my<br><span>little pink world!</span></h1>
-        <p>I'm Brindha, an IT student who loves building creative websites and fun digital experiences.</p>
-        <a class="btn primary" href="#game">Play my game ✨</a>
-        <a class="btn secondary" href="#projects">Explore projects</a>
-      </div>
-      <div class="hero-art" aria-label="Pink flower and stars">
-        <div class="orbit orbit-one"></div>
-        <div class="orbit orbit-two"></div>
-        <div class="hero-flower">🌸</div>
-        <span class="float-star star-a">✦</span>
-        <span class="float-star star-b">♡</span>
-        <span class="float-star star-c">✧</span>
-        <span class="float-star star-d">⭐</span>
-      </div>
-    </section>
+<div class="hud">
+  <div class="pill">🌸 Pink Runner</div>
+  <div class="pill">🪙 Coins: <span id="score">0</span></div>
+  <div class="pill">🏆 Level: <span id="level">1</span></div>
+</div>
 
-    <section class="game-section section" id="game">
-      <div class="section-heading">
-        <span class="eyebrow">YOUR ADVENTURE STARTS HERE</span>
-        <h2>The Pink World <span>Adventure</span> 🎮</h2>
-        <p>Collect every star, dodge obstacles and unlock all three worlds!</p>
-      </div>
+<div id="message">
+  <div class="panel">
+    <h1>🌸 Brindha's Pink World 🌸</h1>
+    <p>Run through the magical pink world, collect coins and avoid obstacles!</p>
+    <p>⬅️ ➡️ Move · ⬆️ Jump</p>
+    <button id="startBtn">Start Game 🎮</button>
+    <button id="showResumeBtn">View My Resume 💼</button>
+    <p><small>Created by Brindha A · Aspiring Full Stack Developer</small></p>
+  </div>
+</div>
 
-      <div class="game-shell">
-        <div class="game-topbar">
-          <div>
-            <span class="mini-label">CURRENT WORLD</span>
-            <h3 id="levelTitle">🌸 Level 1 — Pink Garden</h3>
-          </div>
-          <div class="stats">
-            <span>⭐ <b id="score">0</b></span>
-            <span>💗 <b id="starCount">0 / 5</b></span>
-          </div>
-        </div>
+<div id="controls">
+  <div>
+    <button id="leftBtn" aria-label="Move left">⬅️</button>
+    <button id="rightBtn" aria-label="Move right">➡️</button>
+  </div>
+  <button id="jump" aria-label="Jump">JUMP ⬆️</button>
+</div>
 
-        <div class="progress-track">
-          <div id="progressBar"></div>
-        </div>
+<div id="resumeOverlay" class="hidden">
+  <div class="resume-card">
+    <h1>🎉 Game Over! Welcome to My Portfolio 💗</h1>
+    <h2>Brindha A | Full Stack Developer</h2>
+    <p>Thank you for playing my game! Here's my professional resume.</p>
 
-        <div class="canvas-wrap">
-          <canvas id="gameCanvas" width="900" height="500"
-            aria-label="Game world. Use arrow keys or WASD to move the character.">
-          </canvas>
+    <iframe class="resume-frame" src="resume.pdf"
+      title="Brindha A Resume"></iframe>
 
-          <div class="screen" id="levelScreen">
-            <div class="screen-card">
-              <div class="screen-icon">🌸</div>
-              <span class="eyebrow">CHOOSE YOUR ADVENTURE</span>
-              <h2>Choose a Level</h2>
-              <p>Collect all the stars and find the glowing exit!</p>
-              <div class="level-grid">
-                <button class="level-card unlocked" data-level="0">
-                  <span class="level-emoji">🌷</span>
-                  <b>Level 1</b>
-                  <small>Pink Garden</small>
-                  <span class="level-status" id="status0">PLAY NOW</span>
-                </button>
-                <button class="level-card locked" data-level="1" disabled>
-                  <span class="level-emoji">🦋</span>
-                  <b>Level 2</b>
-                  <small>Magic Forest</small>
-                  <span class="level-status" id="status1">🔒 LOCKED</span>
-                </button>
-                <button class="level-card locked" data-level="2" disabled>
-                  <span class="level-emoji">👑</span>
-                  <b>Level 3</b>
-                  <small>Princess Castle</small>
-                  <span class="level-status" id="status2">🔒 LOCKED</span>
-                </button>
-              </div>
-              <p class="small-note">⌨️ Arrow keys / WASD · 📱 Touch controls</p>
-              <button class="btn secondary" id="resetProgress">Reset all progress</button>
-            </div>
-          </div>
+    <p>
+      <a class="link" href="resume.pdf" target="_blank">📄 Open Resume PDF</a>
+      <a class="link" href="resume.pdf" download>⬇️ Download Resume</a>
+    </p>
 
-          <div class="screen hidden" id="messageScreen">
-            <div class="screen-card message-card">
-              <div class="screen-icon" id="messageIcon">🌟</div>
-              <span class="eyebrow" id="messageEyebrow">LEVEL COMPLETE</span>
-              <h2 id="messageTitle">Amazing!</h2>
-              <p id="messageText">You collected every star!</p>
-              <div class="message-buttons">
-                <button class="btn primary" id="primaryAction">Next level ✨</button>
-                <button class="btn secondary" id="menuAction">Level menu</button>
-              </div>
-            </div>
-          </div>
-        </div>
+    <h2>💻 My Projects</h2>
+    <p>
+      <a class="link" href="https://github.com/brindhaArikrishnan/Campus-event-manager" target="_blank">CampusConnect</a>
+      <a class="link" href="https://github.com/brindhaArikrishnan/AI-Teacher" target="_blank">AI Teacher</a>
+      <a class="link" href="https://github.com/brindhaArikrishnan/CodeOrbit_PersonalPortfolio" target="_blank">Portfolio Project</a>
+    </p>
 
-        <div class="game-controls">
-          <div class="control-info">
-            <b>How to play</b>
-            <span>Move with arrows or WASD · Collect ⭐ · Reach the exit 🚪</span>
-          </div>
-          <div class="game-buttons">
-            <button class="icon-btn" id="soundBtn" aria-label="Toggle sound">🔊 Sound</button>
-            <button class="icon-btn" id="restartBtn">↻ Restart</button>
-            <button class="icon-btn" id="levelMenuBtn">☰ Levels</button>
-          </div>
-        </div>
+    <h2>🔗 Find Me Online</h2>
+    <p>
+      <a class="link" href="https://github.com/brindhaArikrishnan" target="_blank">GitHub Profile</a>
+      <a class="link" href="https://www.linkedin.com/in/brindha-a-250955338/" target="_blank">LinkedIn</a>
+    </p>
 
-        <div class="mobile-controls" aria-label="Touch controls">
-          <button data-dir="up" aria-label="Move up">▲</button>
-          <div class="horizontal-controls">
-            <button data-dir="left" aria-label="Move left">◀</button>
-            <button data-dir="down" aria-label="Move down">▼</button>
-            <button data-dir="right" aria-label="Move right">▶</button>
-          </div>
-        </div>
-      </div>
-      <p class="game-hint">💡 Hint: The exit opens only after you collect every star in the level.</p>
-    </section>
+    <button id="restartBtn">🔄 Play Again</button>
+  </div>
+</div>
 
-    <section class="section about-section" id="about">
-      <div class="section-heading">
-        <span class="eyebrow">A LITTLE ABOUT ME</span>
-        <h2>Hi, I'm <span>Brindha!</span> 💗</h2>
-      </div>
-      <div class="about-card">
-        <div class="about-icon">👩🏻‍💻</div>
-        <div>
-          <h3>IT Student & Aspiring Full Stack Developer</h3>
-          <p>I'm an Information Technology student passionate about web development, creative projects and learning new technologies. I enjoy turning ideas into useful and beautiful digital experiences.</p>
-          <p class="tag-list"><span>Curious learner</span><span>Creative thinker</span><span>Future developer</span></p>
-        </div>
-      </div>
-    </section>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
 
-    <section class="section" id="skills">
-      <div class="section-heading">
-        <span class="eyebrow">WHAT I WORK WITH</span>
-        <h2>My <span>Skills</span> ✨</h2>
-      </div>
-      <div class="skills-grid">
-        <div class="skill-card">🌐 <b>HTML & CSS</b><small>Web structure and design</small></div>
-        <div class="skill-card">⚡ <b>JavaScript</b><small>Interactive experiences</small></div>
-        <div class="skill-card">🟢 <b>Node.js & Express</b><small>Backend fundamentals</small></div>
-        <div class="skill-card">🗄️ <b>MySQL & MongoDB</b><small>Database basics</small></div>
-        <div class="skill-card">☕ <b>Java & Python</b><small>Programming</small></div>
-        <div class="skill-card">🐙 <b>Git & GitHub</b><small>Version control</small></div>
-      </div>
-    </section>
+<script type="module">
+import * as THREE from "three";
 
-    <section class="section projects-section" id="projects">
-      <div class="section-heading">
-        <span class="eyebrow">THINGS I'VE BUILT</span>
-        <h2>Featured <span>Projects</span> 🌷</h2>
-      </div>
-      <div class="projects-grid">
-        <article class="project-card">
-          <div class="project-art art-one">🎓</div>
-          <div class="project-body">
-            <span class="project-type">MERN PROJECT</span>
-            <h3>CampusConnect</h3>
-            <p>A campus event and hackathon management project for exploring events and registrations.</p>
-            <div class="tag-list"><span>React</span><span>Node.js</span><span>MongoDB</span></div>
-            <a href="https://github.com/brindhaArikrishnan/Campus-event-manager" target="_blank" rel="noopener noreferrer">View on GitHub ↗</a>
-          </div>
-        </article>
-        <article class="project-card">
-          <div class="project-art art-two">🤖</div>
-          <div class="project-body">
-            <span class="project-type">EDTECH PROJECT</span>
-            <h3>AI Teacher</h3>
-            <p>An educational web application concept designed to support learning with AI features.</p>
-            <div class="tag-list"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
-            <a href="https://github.com/brindhaArikrishnan/AI-Teacher" target="_blank" rel="noopener noreferrer">View on GitHub ↗</a>
-          </div>
-        </article>
-        <article class="project-card">
-          <div class="project-art art-three">🎮</div>
-          <div class="project-body">
-            <span class="project-type">CREATIVE WEB PROJECT</span>
-            <h3>Cute Pink Game Portfolio</h3>
-            <p>A personal portfolio combined with a three-level collectible-star adventure game.</p>
-            <div class="tag-list"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
-            <a href="https://github.com/brindhaArikrishnan/CodeOrbit_PersonalPortfolio" target="_blank" rel="noopener noreferrer">My portfolio repo ↗</a>
-          </div>
-        </article>
-      </div>
-    </section>
+const container = document.getElementById("game");
+const scoreText = document.getElementById("score");
+const levelText = document.getElementById("level");
+const message = document.getElementById("message");
+const resumeOverlay = document.getElementById("resumeOverlay");
 
-    <section class="section contact-section" id="contact">
-      <div class="contact-card">
-        <div class="section-heading">
-          <span class="eyebrow">LET'S CONNECT</span>
-          <h2>Let's build something <span>lovely!</span> 💌</h2>
-          <p>I'm always happy to learn, collaborate and explore new ideas.</p>
-        </div>
-        <div class="contact-links">
-          <a class="btn primary" href="https://github.com/brindhaArikrishnan" target="_blank" rel="noopener noreferrer">🐙 GitHub</a>
-          <a class="btn secondary" href="https://www.linkedin.com/in/brindha-a-250955338/" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a>
-          <a class="btn secondary" href="resume.pdf" target="_blank" rel="noopener noreferrer">📄 My Resume</a>
-        </div>
-      </div>
-    </section>
-  </main>
+const scene = new THREE.Scene();
+scene.background = new THREE.Color("#ffc9e3");
+scene.fog = new THREE.Fog("#ffc9e3", 22, 95);
 
-  <footer>
-    <p>Made with ♡ by Brindha · Keep learning, keep blooming 🌸</p>
-  </footer>
+const camera = new THREE.PerspectiveCamera(
+  65, window.innerWidth/window.innerHeight, 0.1, 150
+);
+camera.position.set(0, 5.2, 9);
+camera.lookAt(0, 1, -5);
 
-  <script src="script.js"></script>
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.shadowMap.enabled = true;
+container.appendChild(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight(0xffffff,0xc15c9b,2));
+const sun = new THREE.DirectionalLight(0xffffff,2.5);
+sun.position.set(-4,10,7);
+sun.castShadow = true;
+scene.add(sun);
+
+const mat = (color,roughness=0.8) =>
+  new THREE.MeshStandardMaterial({color,roughness});
+
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(200,200),
+  mat("#f5a9cf")
+);
+floor.rotation.x = -Math.PI/2;
+floor.position.y = -0.05;
+floor.receiveShadow = true;
+scene.add(floor);
+
+// Three running lanes
+const laneLines = [];
+for(let z=-100;z<20;z+=5){
+  for(const x of [-1.5,1.5]){
+    const line = new THREE.Mesh(
+      new THREE.BoxGeometry(0.045,0.02,2.2),
+      mat("#fff0f8")
+    );
+    line.position.set(x,0.015,z);
+    scene.add(line);
+    laneLines.push(line);
+  }
+}
+
+// Decorative pink trees
+const trees = [];
+for(let i=0;i<28;i++){
+  for(const side of [-1,1]){
+    const group = new THREE.Group();
+    const trunk = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.12,0.18,1.5,8),
+      mat("#a65b78")
+    );
+    trunk.position.y=0.75;
+    group.add(trunk);
+
+    const top = new THREE.Mesh(
+      new THREE.SphereGeometry(0.75,12,10),
+      mat(i%2 ? "#ff83bb" : "#e96bb0")
+    );
+    top.position.y=1.8;
+    group.add(top);
+    group.position.set(side*(4.5+Math.random()*2),0,-i*4-5);
+    scene.add(group);
+    trees.push(group);
+  }
+}
+
+// Simple 3D girl avatar made from shapes
+const girl = new THREE.Group();
+scene.add(girl);
+girl.position.set(0,0,2);
+
+const skin = mat("#ffcfad");
+const hair = mat("#533047");
+const dress = mat("#ec4e9b");
+const white = mat("#fff4fa");
+const dark = mat("#42253b");
+
+function sphere(parent,r,color,x,y,z,sx=1,sy=1,sz=1){
+  const m = new THREE.Mesh(new THREE.SphereGeometry(r,16,12),color);
+  m.position.set(x,y,z);
+  m.scale.set(sx,sy,sz);
+  m.castShadow=true;
+  parent.add(m);
+  return m;
+}
+
+function limb(parent,r1,r2,length,color,x,y,z){
+  const m = new THREE.Mesh(
+    new THREE.CylinderGeometry(r1,r2,length,10),
+    color
+  );
+  m.position.set(x,y,z);
+  m.castShadow=true;
+  parent.add(m);
+  return m;
+}
+
+const body = new THREE.Group();
+girl.add(body);
+
+sphere(body,0.34,skin,0,1.65,0,0.82,1,0.75);
+sphere(body,0.45,dress,0,1.02,0,1,1.15,0.8);
+sphere(body,0.3,skin,0,2.2,0,0.95,1.05,0.9);
+sphere(body,0.33,hair,0,2.4,-0.06,1.05,0.95,0.9);
+sphere(body,0.18,hair,-0.24,2.2,0.15,0.6,1.1,0.7);
+sphere(body,0.18,hair,0.24,2.2,0.15,0.6,1.1,0.7);
+
+sphere(body,0.045,dark,-0.11,2.23,0.27);
+sphere(body,0.045,dark,0.11,2.23,0.27);
+sphere(body,0.025,white,-0.10,2.25,0.3);
+sphere(body,0.025,white,0.12,2.25,0.3);
+sphere(body,0.04,mat("#ef7b94"),0,2.12,0.29,1,0.7,0.7);
+
+// Hair bow
+sphere(body,0.12,mat("#ffdf78"),0,2.78,0,1,0.55,0.6);
+sphere(body,0.1,mat("#ff7bb9"),-0.1,2.78,0.02);
+sphere(body,0.1,mat("#ff7bb9"),0.1,2.78,0.02);
+
+const arms=[];
+for(const side of [-1,1]){
+  const arm = new THREE.Group();
+  arm.position.set(side*0.34,1.55,0);
+  body.add(arm);
+  const a=limb(arm,0.09,0.12,0.55,skin,side*0.12,-0.22,0);
+  a.rotation.z=side*-0.4;
+  sphere(arm,0.1,skin,side*0.22,-0.48,0);
+  arms.push(arm);
+}
+
+const legs=[];
+for(const side of [-1,1]){
+  const leg=new THREE.Group();
+  leg.position.set(side*0.17,0.65,0);
+  girl.add(leg);
+  limb(leg,0.11,0.13,0.55,skin,0,-0.22,0);
+  const shoe=new THREE.Mesh(
+    new THREE.SphereGeometry(0.16,12,10),
+    mat("#8b426b")
+  );
+  shoe.position.set(0,-0.53,0.1);
+  shoe.scale.set(1,0.65,1.4);
+  shoe.castShadow=true;
+  leg.add(shoe);
+  legs.push(leg);
+}
+
+// Obstacles and coins
+const obstacles=[];
+const coins=[];
+const coinMat=mat("#ffd65a",0.3);
+const obstacleMat=mat("#b84b94");
+
+function makeObstacle(z){
+  const group=new THREE.Group();
+  const block=new THREE.Mesh(
+    new THREE.BoxGeometry(0.8,0.9,0.7),
+    obstacleMat
+  );
+  block.position.y=0.45;
+  block.castShadow=true;
+  group.add(block);
+
+  const heart=sphere(group,0.13,mat("#fff0f7"),0,0.53,0.37,1.2,1,0.5);
+  group.position.set([-2,0,2][Math.floor(Math.random()*3)],0,z);
+  scene.add(group);
+  obstacles.push(group);
+}
+
+function makeCoin(z){
+  const coin=new THREE.Mesh(
+    new THREE.TorusGeometry(0.27,0.09,10,20),
+    coinMat
+  );
+  coin.position.set([-2,0,2][Math.floor(Math.random()*3)],1.25,z);
+  coin.castShadow=true;
+  scene.add(coin);
+  coins.push(coin);
+}
+
+for(let i=0;i<9;i++){
+  makeObstacle(-15-i*12);
+  makeCoin(-10-i*12);
+}
+
+let running=false;
+let lane=1;
+let score=0;
+let level=1;
+let elapsed=0;
+let jump=0;
+let jumpVelocity=0;
+let lastTime=0;
+
+function moveLane(direction){
+  if(!running)return;
+  lane=Math.max(0,Math.min(2,lane+direction));
+}
+
+function doJump(){
+  if(running && jump===0){
+    jumpVelocity=7;
+  }
+}
+
+document.addEventListener("keydown",e=>{
+  if(["ArrowLeft","a","A"].includes(e.key))moveLane(-1);
+  if(["ArrowRight","d","D"].includes(e.key))moveLane(1);
+  if(["ArrowUp"," ","w","W"].includes(e.key)){
+    e.preventDefault();
+    doJump();
+  }
+});
+
+document.getElementById("leftBtn").onclick=()=>moveLane(-1);
+document.getElementById("rightBtn").onclick=()=>moveLane(1);
+document.getElementById("jump").onclick=doJump;
+
+document.getElementById("showResumeBtn").onclick=showResume;
+document.getElementById("startBtn").onclick=startGame;
+document.getElementById("restartBtn").onclick=()=>{
+  resumeOverlay.classList.add("hidden");
+  startGame();
+};
+
+function startGame(){
+  score=0;
+  level=1;
+  elapsed=0;
+  lane=1;
+  jump=0;
+  jumpVelocity=0;
+  girl.position.set(0,0,2);
+
+  obstacles.forEach((o,i)=>{
+    o.visible=true;
+    o.position.z=-15-i*12;
+    o.position.x=[-2,0,2][Math.floor(Math.random()*3)];
+  });
+  coins.forEach((c,i)=>{
+    c.visible=true;
+    c.position.z=-10-i*12;
+    c.position.x=[-2,0,2][Math.floor(Math.random()*3)];
+  });
+
+  scoreText.textContent=score;
+  levelText.textContent=level;
+  message.classList.add("hidden");
+  resumeOverlay.classList.add("hidden");
+  running=true;
+  lastTime=performance.now();
+}
+
+function showResume(){
+  running=false;
+  message.classList.add("hidden");
+  resumeOverlay.classList.remove("hidden");
+}
+
+function endGame(){
+  if(!running)return;
+  running=false;
+  showResume();
+}
+
+function update(delta){
+  elapsed+=delta;
+
+  // Finish after 3 levels (60 seconds), or when an obstacle is hit
+  level=Math.min(3,Math.floor(elapsed/20)+1);
+  levelText.textContent=level;
+
+  const speed=11+(level-1)*2;
+  const targetX=[-2,0,2][lane];
+  girl.position.x += (targetX-girl.position.x)*Math.min(1,delta*10);
+
+  // Jump physics
+  if(jumpVelocity!==0 || jump>0){
+    jumpVelocity-=18*delta;
+    jump+=jumpVelocity*delta;
+    if(jump<=0){
+      jump=0;
+      jumpVelocity=0;
+    }
+  }
+  girl.position.y=Math.max(0,jump);
+
+  // Running animation
+  const t=elapsed*12;
+  legs[0].rotation.x=Math.sin(t)*0.7;
+  legs[1].rotation.x=Math.sin(t+Math.PI)*0.7;
+  arms[0].rotation.x=Math.sin(t+Math.PI)*0.4;
+  arms[1].rotation.x=Math.sin(t)*0.4;
+  body.rotation.z=Math.sin(t)*0.035;
+
+  laneLines.forEach(line=>{
+    line.position.z+=speed*delta;
+    if(line.position.z>8)line.position.z-=110;
+  });
+
+  trees.forEach(tree=>{
+    tree.position.z+=speed*delta*0.75;
+    if(tree.position.z>12)tree.position.z-=112;
+  });
+
+  for(const coin of coins){
+    if(!coin.visible)continue;
+    coin.position.z+=speed*delta;
+    coin.rotation.y+=delta*3;
+
+    if(coin.position.z>1 && coin.position.z<3 &&
+       Math.abs(coin.position.x-girl.position.x)<0.75){
+      coin.visible=false;
+      score++;
+      scoreText.textContent=score;
+    }
+
+    if(coin.position.z>8){
+      coin.position.z-=108;
+      coin.position.x=[-2,0,2][Math.floor(Math.random()*3)];
+      coin.visible=true;
+    }
+  }
+
+  for(const obstacle of obstacles){
+    if(!obstacle.visible)continue;
+    obstacle.position.z+=speed*delta;
+
+    const close=Math.abs(obstacle.position.z-girl.position.z)<0.8;
+    const sameLane=Math.abs(obstacle.position.x-girl.position.x)<0.7;
+
+    if(close && sameLane && jump<0.65){
+      endGame();
+      return;
+    }
+
+    if(obstacle.position.z>8){
+      obstacle.position.z-=108;
+      obstacle.position.x=[-2,0,2][Math.floor(Math.random()*3)];
+    }
+  }
+
+  if(elapsed>=60){
+    endGame();
+  }
+}
+
+function animate(now){
+  requestAnimationFrame(animate);
+  const delta=Math.min((now-lastTime)/1000||0,0.04);
+  lastTime=now;
+
+  if(running)update(delta);
+
+  renderer.render(scene,camera);
+}
+requestAnimationFrame(animate);
+
+window.addEventListener("resize",()=>{
+  camera.aspect=window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+</script>
 </body>
 </html>
