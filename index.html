@@ -3,607 +3,348 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Brindha's Pink Doll Game Portfolio</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brindha | Pink Robot Runner Portfolio</title>
 <style>
-:root {
-  --pink: #ec68a8;
-  --dark: #87345f;
-  --light: #fff0f7;
-  --border: #ffc0dc;
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #ffe4f1;
-  color: var(--dark);
-}
-button, a { font: inherit; }
-button {
-  border: 0;
-  border-radius: 13px;
-  padding: 12px 17px;
-  color: white;
-  background: var(--pink);
-  font-weight: bold;
-  cursor: pointer;
-}
-button:hover, a:hover { filter: brightness(.95); }
-a { color: #bd397b; font-weight: bold; }
-.hidden { display: none !important; }
-
-.game {
-  position: relative;
-  min-height: 100vh;
-  overflow: hidden;
-  background: linear-gradient(#ffc8e2 0%, #fff0f7 65%, #f6b6d7 100%);
-}
-.cloud {
-  position: absolute;
-  font-size: 42px;
-  opacity: .8;
-  animation: drift 14s linear infinite;
-}
-.cloud.one { top: 95px; left: 5%; }
-.cloud.two { top: 180px; left: 75%; animation-delay: -7s; }
-@keyframes drift {
-  from { transform: translateX(-15px); }
-  to { transform: translateX(35px); }
-}
-
-.topbar {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  flex-wrap: wrap;
-  padding: 14px;
-}
-.badge {
-  background: #ffffffdc;
-  padding: 11px 14px;
-  border-radius: 15px;
-  font-weight: bold;
-  box-shadow: 0 4px 12px #b84e8330;
-}
-.track {
-  position: relative;
-  width: min(520px, 94%);
-  height: min(63vh, 510px);
-  min-height: 340px;
-  margin: 5px auto 0;
-  overflow: hidden;
-  border: 5px solid #fff7fb;
-  border-radius: 32px;
-  background: linear-gradient(90deg,
-    #f7b2d4 0%, #f7b2d4 33%,
-    #ffd4e8 33%, #ffd4e8 66%,
-    #f7b2d4 66%, #f7b2d4 100%);
-  box-shadow: 0 15px 45px #b94e8330;
-}
-.lane-line {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: repeating-linear-gradient(
-    to bottom, white 0 25px, transparent 25px 48px
-  );
-  opacity: .8;
-}
-.lane-line.left { left: 33%; }
-.lane-line.right { left: 66%; }
-
-.track-decoration {
-  position: absolute;
-  top: 10px;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 23px;
-  pointer-events: none;
-}
-.doll {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  bottom: 22px;
-  width: 90px;
-  height: 132px;
-  object-fit: contain;
-  transform: translateX(-50%);
-  filter: drop-shadow(0 5px 3px #9d477344);
-  transition: left .13s ease;
-  animation: bounce .45s ease-in-out infinite alternate;
-}
-@keyframes bounce {
-  from { margin-bottom: 0; }
-  to { margin-bottom: 6px; }
-}
-.object {
-  position: absolute;
-  z-index: 1;
-  font-size: 35px;
-  width: 42px;
-  height: 42px;
-  text-align: center;
-  line-height: 42px;
-  left: 50%;
-  top: -50px;
-  user-select: none;
-}
-.object.coin { filter: drop-shadow(0 3px 4px #d99b19); }
-.object.obstacle { filter: drop-shadow(0 3px 3px #bd6797); }
-
-.controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-}
-.controls button { min-width: 66px; font-size: 19px; }
-.hint { text-align: center; margin: 2px 12px 20px; color: #955078; }
-
-.overlay {
-  position: fixed;
-  z-index: 10;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px;
-  background: #54203eaa;
-  overflow-y: auto;
-}
-.panel {
-  width: min(620px, 100%);
-  max-height: 94vh;
-  overflow-y: auto;
-  background: #fff7fb;
-  border: 3px solid var(--border);
-  border-radius: 25px;
-  padding: 24px;
-  text-align: center;
-  box-shadow: 0 15px 60px #38132955;
-}
-.panel h1 { color: #d74791; margin: 5px 0 12px; }
-.panel h2 { font-size: 20px; }
-.panel p { line-height: 1.6; }
-.skill-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  margin: 14px 0;
-}
-.skill {
-  padding: 8px 11px;
-  background: #ffe1ef;
-  border: 1px solid #ffc0dc;
-  border-radius: 20px;
-  font-size: 14px;
-}
-.question {
-  text-align: left;
-  padding: 15px;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 15px;
-  margin: 15px 0;
-  line-height: 1.6;
-}
-.answer { color: #21824d; font-weight: bold; }
-.project {
-  text-align: left;
-  background: white;
-  border: 1px solid #f5c5dc;
-  padding: 12px;
-  border-radius: 13px;
-  margin: 10px 0;
-}
-.project p { margin: 6px 0; }
-.actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-.secondary { background: #ad6791; }
-.resume-frame {
-  width: 100%;
-  height: 50vh;
-  min-height: 280px;
-  border: 2px solid var(--border);
-  border-radius: 12px;
-  background: white;
-}
-.footer { font-size: 13px; color: #9d6c88; }
-
-@media(max-width:480px) {
-  .topbar { padding: 9px; }
-  .badge { font-size: 12px; padding: 9px; }
-  .track { min-height: 340px; }
-  .doll { width: 78px; height: 120px; }
-  .panel { padding: 17px; }
-}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;color:#793657;background:#ffe7f3}
+button,a{font:inherit}
+button{border:0;border-radius:14px;padding:12px 17px;background:#e95da2;color:white;font-weight:bold;cursor:pointer}
+button:active{transform:scale(.97)}
+a{color:#c83d84;font-weight:bold}
+.hidden{display:none!important}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:12px}
+.badge{background:#fff8fc;padding:11px 13px;border-radius:16px;font-weight:bold;box-shadow:0 4px 12px #a9437430}
+#game{min-height:100vh;background:linear-gradient(#ffc5e0,#ffe8f4)}
+#track{position:relative;overflow:hidden;width:min(500px,94vw);height:min(62vh,550px);min-height:350px;margin:5px auto;background:linear-gradient(90deg,#f5add0 0 33%,#ffd9e9 33% 66%,#f5add0 66%);border:6px solid white;border-radius:30px;box-shadow:0 10px 35px #aa548330}
+.line{position:absolute;top:0;bottom:0;width:4px;background:repeating-linear-gradient(to bottom,white 0 25px,transparent 25px 48px)}
+.line.l{left:33.33%}.line.r{left:66.66%}
+#scenery{position:absolute;inset:0;pointer-events:none;font-size:25px}
+.decoration{position:absolute;white-space:nowrap;left:5%;top:0}
+.object{position:absolute;left:50%;top:-55px;transform:translateX(-50%);font-size:35px}
+#doll{position:absolute;z-index:2;bottom:20px;width:86px;height:130px;left:50%;transform:translateX(-50%);transition:left .14s}
+.robot{position:relative;width:76px;height:120px;margin:auto;animation:runbob .18s infinite alternate}
+.robot-head{position:absolute;top:3px;left:12px;width:52px;height:44px;border:4px solid #b64d86;border-radius:17px;background:linear-gradient(135deg,#fff,#ffb8d9);box-shadow:inset 0 -5px #f58ab9}
+.robot-eye{position:absolute;top:13px;width:9px;height:12px;background:#743458;border-radius:50%;box-shadow:0 0 7px #ef3c96}
+.robot-eye.one{left:10px}.robot-eye.two{right:10px}
+.robot-antenna{position:absolute;top:-10px;left:34px;width:5px;height:13px;background:#c34e8c}
+.robot-antenna:after{content:"";position:absolute;top:-5px;left:-3px;width:11px;height:11px;border-radius:50%;background:#ffcc54}
+.robot-body{position:absolute;top:51px;left:18px;width:40px;height:35px;border:4px solid #b64d86;border-radius:12px;background:linear-gradient(135deg,#fff,#ffacd2)}
+.robot-heart{position:absolute;top:5px;left:10px;font-size:14px}
+.arm{position:absolute;top:57px;width:10px;height:25px;border-radius:10px;background:#ffafd2;border:2px solid #b64d86;transform-origin:top}
+.arm.left{left:8px;animation:armrun .2s infinite alternate}
+.arm.right{right:8px;animation:armrun .2s infinite alternate-reverse}
+.leg{position:absolute;top:83px;width:12px;height:25px;background:#e977af;border:2px solid #b64d86;border-radius:8px;transform-origin:top}
+.leg.left{left:23px;animation:legrun .2s infinite alternate}
+.leg.right{right:23px;animation:legrun .2s infinite alternate-reverse}
+.foot{position:absolute;bottom:-2px;width:18px;height:8px;border-radius:8px;background:#b64d86}
+.leg.left .foot{left:-5px}.leg.right .foot{right:-5px}
+@keyframes runbob{from{transform:translateY(0)}to{transform:translateY(-5px)}}
+@keyframes legrun{from{transform:rotate(-30deg)}to{transform:rotate(30deg)}}
+@keyframes armrun{from{transform:rotate(25deg)}to{transform:rotate(-25deg)}}
+.controls{display:flex;justify-content:center;gap:12px;margin:15px}
+.controls button{min-width:65px;font-size:20px}
+.hint{text-align:center;padding:0 15px 15px}
+.overlay{position:fixed;z-index:5;inset:0;display:flex;justify-content:center;align-items:center;padding:14px;background:#51203fba;overflow-y:auto}
+.card{background:#fff7fb;border:3px solid #ffc0dc;border-radius:25px;padding:23px;width:min(600px,100%);max-height:94vh;overflow-y:auto;text-align:center;box-shadow:0 12px 50px #48172f55}
+.card h1{color:#d94d95;font-size:25px}
+.card h2{font-size:20px}
+.card p{line-height:1.6}
+.skills{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:15px 0}
+.skills span{padding:9px 12px;border-radius:20px;background:#ffe0ef;border:1px solid #ffc0dc}
+.project{padding:13px;background:white;border:1px solid #f3c4db;border-radius:14px;margin:12px 0}
+.question{text-align:left;background:white;padding:14px;border-radius:14px;line-height:1.6}
+.answer{color:#178049;font-weight:bold}
+.actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:15px}
+.secondary{background:#a76b91}
+.resume{width:100%;height:48vh;border:2px solid #ffc0dc;border-radius:12px;background:white}
+.progress{height:8px;background:#f8d3e6;border-radius:10px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:#e95da2;transition:width .3s}
+@media(max-width:450px){header{padding:8px}.badge{font-size:12px;padding:9px}.card{padding:16px}.robot{transform:scale(.95)}}
 </style>
 </head>
-
 <body>
-
-<div class="game">
-  <div class="cloud one">☁️</div>
-  <div class="cloud two">☁️</div>
-
-  <header class="topbar">
-    <div class="badge">🎀 Pink Doll Runner</div>
-    <div class="badge">🪙 Coins: <span id="score">0</span></div>
-    <div class="badge">🌸 Level: <span id="level">1</span>/3</div>
-  </header>
-
-  <main class="track" id="track">
-    <div class="lane-line left"></div>
-    <div class="lane-line right"></div>
-    <div class="track-decoration" id="decoration">🌸 🌷 🌸 🌷 🌸</div>
-
-    <img
-      id="doll"
-      class="doll"
-      alt="Cute doll game character"
-      src="https://api.dicebear.com/9.x/adventurer/svg?seed=Brindha&backgroundColor=ffdfef"
-    />
-  </main>
-
-  <div class="controls">
-    <button id="leftBtn" aria-label="Move left">⬅️</button>
-    <button id="jumpBtn">⬆️ Jump</button>
-    <button id="rightBtn" aria-label="Move right">➡️</button>
+<div id="game">
+<header>
+ <div class="badge">🎀 Pink Robot Runner</div>
+ <div class="badge">🪙 Coins: <span id="score">0</span></div>
+ <div class="badge">Level <span id="level">1</span>/3</div>
+</header>
+<div id="track">
+ <div class="line l"></div><div class="line r"></div>
+ <div id="scenery"></div>
+ <div id="doll">
+  <div class="robot">
+   <div class="robot-antenna"></div>
+   <div class="robot-head"><span class="robot-eye one"></span><span class="robot-eye two"></span></div>
+   <div class="robot-body"><span class="robot-heart">💗</span></div>
+   <div class="arm left"></div><div class="arm right"></div>
+   <div class="leg left"><div class="foot"></div></div>
+   <div class="leg right"><div class="foot"></div></div>
   </div>
-  <p class="hint">Use ← → arrow keys to move and Space to jump. Collect coins! ✨</p>
+ </div>
+</div>
+<div class="controls">
+ <button id="left">⬅️</button><button id="jump">⬆️ Jump</button><button id="right">➡️</button>
+</div>
+<p class="hint">Move the robot, collect coins and complete all 3 levels! 🌸</p>
 </div>
 
-<!-- START SCREEN -->
 <div class="overlay" id="startScreen">
-  <div class="panel">
-    <h1>🌸 Brindha's Pink World 🌸</h1>
-    <img
-      src="https://api.dicebear.com/9.x/adventurer/svg?seed=Brindha&backgroundColor=ffdfef"
-      alt="Cute doll"
-      width="105"
-    />
-    <p>Help the doll collect coins and explore my developer portfolio!</p>
-    <p>🎮 Three levels · 💻 Coding questions · 📄 Resume</p>
-    <div class="actions">
-      <button id="startBtn">Start Game 🎀</button>
-      <button class="secondary" id="viewResumeBtn">View Resume</button>
-    </div>
-    <p class="footer">Created by Brindha A · Aspiring Full Stack Developer</p>
-  </div>
+ <div class="card">
+  <h1>🌸 Brindha's Pink Robot World 🌸</h1>
+  <p>Help my little robot run through three magical levels. At the finish, discover my resume step by step!</p>
+  <p>🤖 Auto-running animation · 🪙 Coins · 🏆 3 levels</p>
+  <button id="start">Start Running 🎮</button>
+  <p><a href="resume.pdf" target="_blank">View Resume PDF</a></p>
+ </div>
 </div>
 
-<!-- LEVEL INFORMATION -->
 <div class="overlay hidden" id="levelScreen">
-  <div class="panel">
-    <h1 id="levelTitle">🌸 Level Complete!</h1>
-    <p id="levelIntro"></p>
-
-    <h2>💻 My Resume Skills</h2>
-    <div class="skill-list" id="skills"></div>
-
-    <div class="question">
-      <strong>🧠 Coding Question</strong>
-      <p id="questionText"></p>
-      <p class="answer" id="answerText"></p>
-    </div>
-
-    <h2>🚀 My Project</h2>
-    <div class="project">
-      <strong id="projectName"></strong>
-      <p id="projectDescription"></p>
-      <a id="projectLink" href="#" target="_blank" rel="noopener">View Project on GitHub ↗</a>
-    </div>
-
-    <div class="actions">
-      <button id="continueBtn">Next Level ➜</button>
-      <button class="secondary" id="levelResumeBtn">View Resume</button>
-    </div>
+ <div class="card">
+  <h1 id="levelTitle">Level Complete! 🌸</h1>
+  <p id="levelIntro"></p>
+  <h2>💼 Resume Skills</h2>
+  <div class="skills" id="skillList"></div>
+  <div class="question">
+   <strong>💻 Coding Question</strong>
+   <p id="question"></p>
+   <p class="answer" id="answer"></p>
   </div>
+  <h2>🚀 Project</h2>
+  <div class="project">
+   <strong id="projectName"></strong>
+   <p id="projectDesc"></p>
+   <a id="projectLink" href="#" target="_blank" rel="noopener">Open Project on GitHub ↗</a>
+  </div>
+  <button id="next">Continue ➜</button>
+ </div>
 </div>
 
-<!-- FINAL RESUME SCREEN -->
 <div class="overlay hidden" id="resumeScreen">
-  <div class="panel">
-    <h1>👑 You Finished the Pink World!</h1>
-    <h2>Brindha A | Full Stack Developer</h2>
-    <p>Thanks for playing! Explore my resume, skills and projects. 💗</p>
-
-    <iframe
-      class="resume-frame"
-      id="resumeFrame"
-      title="Brindha A Resume"
-      src="resume.pdf"
-    ></iframe>
-
-    <p id="pdfMessage" class="footer">
-      If the PDF does not appear, upload resume.pdf to your GitHub repository's main folder.
-    </p>
-
-    <div class="actions">
-      <a class="link" href="resume.pdf" target="_blank" rel="noopener">📄 Open Resume PDF</a>
-      <a class="link" href="resume.pdf" download>⬇️ Download Resume</a>
-    </div>
-
-    <h2>🔗 Find Me Online</h2>
-    <div class="actions">
-      <a class="link" href="https://github.com/brindhaArikrishnan" target="_blank" rel="noopener">GitHub</a>
-      <a class="link" href="https://www.linkedin.com/in/brindha-a-250955338/" target="_blank" rel="noopener">LinkedIn</a>
-    </div>
-
-    <button id="playAgainBtn">🔄 Play Again</button>
+ <div class="card">
+  <h1 id="resumeTitle">My Resume 💗</h1>
+  <div class="progress"><div id="progressBar"></div></div>
+  <p id="resumeStep"></p>
+  <div id="resumeContent"></div>
+  <div class="actions">
+   <button class="secondary hidden" id="prev">⬅ Back</button>
+   <button id="nextResume">Next Step ➜</button>
   </div>
+ </div>
 </div>
 
 <script>
-const $ = id => document.getElementById(id);
-
-const levelData = [
-  {
-    title: "🌸 Level 1 Complete — Web Development!",
-    intro: "You finished the Pink Garden! Here are my web development skills.",
-    skills: ["HTML", "CSS", "JavaScript", "Responsive Web Design"],
-    question: "Which HTML tag creates a hyperlink?",
-    answer: "Answer: <a> — Example: <a href='page.html'>Open page</a>",
-    project: "CodeOrbit Personal Portfolio",
-    description: "A personal portfolio website project.",
-    link: "https://github.com/brindhaArikrishnan/CodeOrbit_PersonalPortfolio"
-  },
-  {
-    title: "🦋 Level 2 Complete — Programming!",
-    intro: "You reached the Magic Garden! Let's look at programming and backend skills.",
-    skills: ["Java", "Python", "Node.js", "Express.js", "MySQL"],
-    question: "In JavaScript, which keyword declares a variable that can be reassigned?",
-    answer: "Answer: let — Example: let score = 10; score = 20;",
-    project: "AI Teacher",
-    description: "An AI-focused educational web application project.",
-    link: "https://github.com/brindhaArikrishnan/AI-Teacher"
-  },
-  {
-    title: "👑 Level 3 Complete — Full Stack Developer!",
-    intro: "You completed all three levels! Here are my project and full-stack skills.",
-    skills: ["Frontend", "Backend", "REST APIs", "Git", "GitHub", "Database Basics"],
-    question: "Which Node.js framework is commonly used to build web APIs?",
-    answer: "Answer: Express.js — Example: app.get('/api', (req, res) => res.json({ message: 'Hello' }));",
-    project: "CampusConnect — Campus Event & Hackathon Manager",
-    description: "A college event and hackathon management project with event and registration features.",
-    link: "https://github.com/brindhaArikrishnan/Campus-event-manager"
-  }
+const $=id=>document.getElementById(id);
+const track=$("track"),doll=$("doll");
+const levelData=[
+ {
+  title:"🌸 Level 1 Complete!",
+  intro:"The robot finished Pink Garden! Here is my introduction and web development skill set.",
+  skills:["HTML","CSS","JavaScript","Responsive Web Design"],
+  q:"Which HTML tag creates a hyperlink?",
+  a:"Answer: <a> — Example: <a href='page.html'>Open</a>",
+  project:"CodeOrbit Personal Portfolio",
+  desc:"A personal portfolio website project.",
+  link:"https://github.com/brindhaArikrishnan/CodeOrbit_PersonalPortfolio"
+ },
+ {
+  title:"🦋 Level 2 Complete!",
+  intro:"The robot finished Magic Forest! Here are my programming and backend skills.",
+  skills:["Java","Python","Node.js","Express.js","MySQL","Git/GitHub"],
+  q:"Which JavaScript keyword declares a variable that can be reassigned?",
+  a:"Answer: let — Example: let score = 10;",
+  project:"AI Teacher",
+  desc:"An AI-focused educational web application project.",
+  link:"https://github.com/brindhaArikrishnan/AI-Teacher"
+ },
+ {
+  title:"👑 Level 3 Complete!",
+  intro:"Congratulations! The robot finished the final level. Explore my full-stack project.",
+  skills:["Frontend Development","Backend Development","REST APIs","Database Basics"],
+  q:"Which Node.js framework is commonly used to create web APIs?",
+  a:"Answer: Express.js",
+  project:"CampusConnect",
+  desc:"Campus event and hackathon manager with event and registration features.",
+  link:"https://github.com/brindhaArikrishnan/Campus-event-manager"
+ }
 ];
 
-let currentLevel = 0;
-let score = 0;
-let lane = 1;
-let running = false;
-let jumping = false;
-let jumpTimer = 0;
-let objects = [];
-let spawnTimer = 0;
-let lastTime = 0;
-let levelTime = 0;
-const LEVEL_DURATION = 18;
+let running=false,level=0,score=0,lane=1,jumping=false;
+let jumpTime=0,elapsed=0,spawn=0,last=0,objects=[];
+const levelDuration=12;
+const laneX=i=>track.clientWidth*(i+.5)/3;
 
-const track = $("track");
-const doll = $("doll");
-
-function laneX(index) {
-  const width = track.clientWidth;
-  return width * (index + 0.5) / 3;
+function placeDoll(){
+ doll.style.left=laneX(lane)+"px";
 }
-
-function positionDoll() {
-  doll.style.left = laneX(lane) + "px";
+function move(d){
+ if(!running)return;
+ lane=Math.max(0,Math.min(2,lane+d));placeDoll();
 }
-
-function move(direction) {
-  if (!running) return;
-  lane = Math.max(0, Math.min(2, lane + direction));
-  positionDoll();
+function jump(){
+ if(!running||jumping)return;
+ jumping=true;jumpTime=.65;
+ doll.style.bottom="80px";
 }
-
-function jump() {
-  if (!running || jumping) return;
-  jumping = true;
-  jumpTimer = 0.65;
-  doll.style.transform = "translateX(-50%) translateY(-65px) scale(1.08)";
+function clearObjects(){
+ objects.forEach(o=>o.el.remove());objects=[];
 }
-
-function resetObjects() {
-  objects.forEach(obj => obj.element.remove());
-  objects = [];
-  spawnTimer = 0;
+function startGame(){
+ $("startScreen").classList.add("hidden");
+ $("levelScreen").classList.add("hidden");
+ $("resumeScreen").classList.add("hidden");
+ level=0;score=0;$("score").textContent=0;
+ clearObjects();startLevel();
 }
+function startLevel(){
+ running=true;elapsed=0;spawn=0;lane=1;jumping=false;
+ doll.style.bottom="20px";placeDoll();
+ $("level").textContent=level+1;
+ $("scenery").textContent=["🌸 🌷 🌸 🌷 🌸","🦋 🌳 🦋 🌳 🦋","👑 🏰 👑 🏰 👑"][level];
+ last=performance.now();
+ requestAnimationFrame(loop);
+}
+function addObject(){
+ const coin=Math.random()<.68;
+ const ln=Math.floor(Math.random()*3);
+ const el=document.createElement("div");
+ el.className="object";
+ el.textContent=coin?"🪙":"🌵";
+ el.style.left=laneX(ln)+"px";
+ track.appendChild(el);
+ objects.push({el,lane:ln,y:-45,coin,checked:false});
+}
+function loop(now){
+ if(!running)return;
+ const dt=Math.min((now-last)/1000,.05);last=now;
+ elapsed+=dt;spawn+=dt;
+ if(spawn>.65){addObject();spawn=0}
+ if(jumping){
+  jumpTime-=dt;
+  if(jumpTime<=0){jumping=false;doll.style.bottom="20px"}
+ }
+ const speed=190+level*30;
+ const dollY=track.clientHeight-145;
+ objects.forEach(o=>{
+  o.y+=speed*dt;o.el.style.top=o.y+"px";
+  if(!o.checked&&o.y>dollY-10&&o.y<dollY+45&&o.lane===lane){
+   o.checked=true;
+   if(o.coin){score++;$("score").textContent=score;o.el.textContent="✨"}
+   else if(!jumping){o.el.textContent="💫"}
+  }
+ });
+ objects=objects.filter(o=>{
+  if(o.y>track.clientHeight+40){o.el.remove();return false}
+  return true;
+ });
+ if(elapsed>=levelDuration){
+  running=false;clearObjects();showLevel();
+  return;
+ }
+ requestAnimationFrame(loop);
+}
+function showLevel(){
+ const d=levelData[level];
+ $("levelTitle").textContent=d.title;
+ $("levelIntro").textContent=d.intro;
+ $("question").textContent=d.q;
+ $("answer").textContent=d.a;
+ $("projectName").textContent=d.project;
+ $("projectDesc").textContent=d.desc;
+ $("projectLink").href=d.link;
+ $("skillList").replaceChildren();
+ d.skills.forEach(s=>{
+  const el=document.createElement("span");el.textContent=s;
+  $("skillList").appendChild(el);
+ });
+ $("next").textContent=level===2?"Finish Game & Open Resume 📄":"Continue to Next Level ➜";
+ $("levelScreen").classList.remove("hidden");
+}
+$("next").onclick=()=>{
+ $("levelScreen").classList.add("hidden");
+ if(level<2){level++;startLevel()}
+ else{openResume()}
+};
+$("start").onclick=startGame;
+$("left").onclick=()=>move(-1);
+$("right").onclick=()=>move(1);
+$("jump").onclick=jump;
+document.addEventListener("keydown",e=>{
+ if(e.key==="ArrowLeft"||e.key.toLowerCase()==="a")move(-1);
+ if(e.key==="ArrowRight"||e.key.toLowerCase()==="d")move(1);
+ if(e.code==="Space"||e.key==="ArrowUp"){e.preventDefault();jump()}
+});
+window.addEventListener("resize",placeDoll);
 
-function startGame() {
-  $("startScreen").classList.add("hidden");
-  $("levelScreen").classList.add("hidden");
+// Resume slides appear one at a time after the final level.
+const resumeSteps=[
+ {
+  title:"Step 1 of 5 — About Me 💗",
+  html:`<h2>Brindha A</h2>
+  <p><strong>Aspiring Full Stack Developer</strong></p>
+  <p>B.Tech Information Technology Student</p>
+  <p>Interested in building web applications and learning new technologies.</p>`
+ },
+ {
+  title:"Step 2 of 5 — My Skills 💻",
+  html:`<h2>Technical Skills</h2>
+  <div class="skills"><span>Java</span><span>Python</span><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Node.js</span><span>Express.js</span><span>MySQL</span><span>Git & GitHub</span></div>`
+ },
+ {
+  title:"Step 3 of 5 — Education 🎓",
+  html:`<h2>B.Tech Information Technology</h2>
+  <p>Mahendra College of Engineering, Salem</p>
+  <p>CGPA: 8.41 (previously provided)</p>
+  <p>HSC — Sacred Heart HSS, Irupukurchi</p>
+  <p>SSLC — Sacred Heart HSS, Irupukurchi</p>`
+ },
+ {
+  title:"Step 4 of 5 — My Projects 🚀",
+  html:`<h2>CampusConnect</h2><p>Campus event and hackathon manager.</p>
+  <p><a href="https://github.com/brindhaArikrishnan/Campus-event-manager" target="_blank" rel="noopener">CampusConnect GitHub ↗</a></p>
+  <hr>
+  <h2>AI Teacher</h2><p>AI-focused educational web app.</p>
+  <p><a href="https://github.com/brindhaArikrishnan/AI-Teacher" target="_blank" rel="noopener">AI Teacher GitHub ↗</a></p>
+  <hr>
+  <h2>Portfolio</h2><p><a href="https://github.com/brindhaArikrishnan/CodeOrbit_PersonalPortfolio" target="_blank" rel="noopener">Portfolio project ↗</a></p>`
+ },
+ {
+  title:"Step 5 of 5 — Resume & Links 👑",
+  html:`<h2>My Resume PDF</h2>
+  <p>My resume is displayed below. You can also open or download it.</p>
+  <iframe class="resume" src="resume.pdf" title="Brindha resume"></iframe>
+  <p><a href="resume.pdf" target="_blank" rel="noopener">📄 Open Resume PDF</a></p>
+  <p><a href="resume.pdf" download>⬇ Download Resume</a></p>
+  <h2>Connect With Me</h2>
+  <p><a href="https://github.com/brindhaArikrishnan" target="_blank" rel="noopener">GitHub Profile ↗</a></p>
+  <p><a href="https://www.linkedin.com/in/brindha-a-250955338/" target="_blank" rel="noopener">LinkedIn Profile ↗</a></p>`
+ }
+];
+let resumeIndex=0;
+function openResume(){
+ running=false;resumeIndex=0;
+ $("resumeScreen").classList.remove("hidden");
+ renderResume();
+}
+function renderResume(){
+ const d=resumeSteps[resumeIndex];
+ $("resumeTitle").textContent=d.title;
+ $("resumeContent").innerHTML=d.html;
+ $("progressBar").style.width=((resumeIndex+1)/resumeSteps.length*100)+"%";
+ $("resumeStep").textContent="Portfolio progress: "+(resumeIndex+1)+" / "+resumeSteps.length;
+ $("prev").classList.toggle("hidden",resumeIndex===0);
+ $("nextResume").textContent=resumeIndex===resumeSteps.length-1?"Play Again 🎮":"Next Step ➜";
+}
+$("prev").onclick=()=>{if(resumeIndex>0){resumeIndex--;renderResume()}};
+$("nextResume").onclick=()=>{
+ if(resumeIndex<resumeSteps.length-1){resumeIndex++;renderResume()}
+ else{
   $("resumeScreen").classList.add("hidden");
-
-  currentLevel = 0;
-  score = 0;
-  $("score").textContent = score;
-  resetObjects();
-  startLevel();
-}
-
-function startLevel() {
-  running = true;
-  levelTime = 0;
-  lane = 1;
-  jumping = false;
-  doll.style.transform = "translateX(-50%)";
-  positionDoll();
-  $("level").textContent = currentLevel + 1;
-  $("decoration").textContent =
-    currentLevel === 0 ? "🌸 🌷 🌸 🌷 🌸" :
-    currentLevel === 1 ? "🦋 🌳 🦋 🌳 🦋" :
-    "👑 🏰 👑 🏰 👑";
-  lastTime = performance.now();
-  requestAnimationFrame(gameLoop);
-}
-
-function spawnObject() {
-  const isCoin = Math.random() < 0.65;
-  const laneIndex = Math.floor(Math.random() * 3);
-  const element = document.createElement("div");
-
-  element.className = "object " + (isCoin ? "coin" : "obstacle");
-  element.textContent = isCoin ? "🪙" : "🌵";
-  element.style.left = laneX(laneIndex) + "px";
-  element.style.top = "-45px";
-  track.appendChild(element);
-
-  objects.push({
-    element,
-    lane: laneIndex,
-    y: -45,
-    coin: isCoin,
-    checked: false
-  });
-}
-
-function gameLoop(now) {
-  if (!running) return;
-
-  const delta = Math.min((now - lastTime) / 1000, 0.04);
-  lastTime = now;
-  levelTime += delta;
-  spawnTimer += delta;
-
-  if (spawnTimer > 0.72) {
-    spawnObject();
-    spawnTimer = 0;
-  }
-
-  if (jumping) {
-    jumpTimer -= delta;
-    if (jumpTimer <= 0) {
-      jumping = false;
-      doll.style.transform = "translateX(-50%)";
-    }
-  }
-
-  const speed = 180 + currentLevel * 35;
-  const dollY = track.clientHeight - 155;
-
-  objects.forEach(obj => {
-    obj.y += speed * delta;
-    obj.element.style.top = obj.y + "px";
-
-    const closeToDoll = obj.y > dollY - 12 && obj.y < dollY + 55;
-
-    if (!obj.checked && closeToDoll && obj.lane === lane) {
-      obj.checked = true;
-
-      if (obj.coin) {
-        score++;
-        $("score").textContent = score;
-        obj.element.textContent = "✨";
-      } else if (!jumping) {
-        // Collision costs a point, but the game continues.
-        score = Math.max(0, score - 1);
-        $("score").textContent = score;
-        obj.element.textContent = "💫";
-      }
-    }
-  });
-
-  objects = objects.filter(obj => {
-    if (obj.y > track.clientHeight + 50) {
-      obj.element.remove();
-      return false;
-    }
-    return true;
-  });
-
-  if (levelTime >= LEVEL_DURATION) {
-    running = false;
-    resetObjects();
-    showLevelScreen();
-    return;
-  }
-
-  requestAnimationFrame(gameLoop);
-}
-
-function showLevelScreen() {
-  const data = levelData[currentLevel];
-
-  $("levelTitle").textContent = data.title;
-  $("levelIntro").textContent = data.intro;
-  $("questionText").textContent = data.question;
-  $("answerText").textContent = data.answer;
-  $("projectName").textContent = data.project;
-  $("projectDescription").textContent = data.description;
-  $("projectLink").href = data.link;
-
-  $("skills").replaceChildren();
-  data.skills.forEach(skill => {
-    const span = document.createElement("span");
-    span.className = "skill";
-    span.textContent = skill;
-    $("skills").appendChild(span);
-  });
-
-  if (currentLevel === levelData.length - 1) {
-    $("continueBtn").textContent = "Finish & View Resume 📄";
-  } else {
-    $("continueBtn").textContent = "Next Level ➜";
-  }
-
-  $("levelScreen").classList.remove("hidden");
-}
-
-function showResume() {
-  running = false;
-  $("startScreen").classList.add("hidden");
-  $("levelScreen").classList.add("hidden");
-  $("resumeScreen").classList.remove("hidden");
-}
-
-$("startBtn").addEventListener("click", startGame);
-$("viewResumeBtn").addEventListener("click", showResume);
-$("levelResumeBtn").addEventListener("click", showResume);
-
-$("continueBtn").addEventListener("click", () => {
-  $("levelScreen").classList.add("hidden");
-
-  if (currentLevel >= levelData.length - 1) {
-    showResume();
-  } else {
-    currentLevel++;
-    startLevel();
-  }
-});
-
-$("playAgainBtn").addEventListener("click", startGame);
-$("leftBtn").addEventListener("click", () => move(-1));
-$("rightBtn").addEventListener("click", () => move(1));
-$("jumpBtn").addEventListener("click", jump);
-
-document.addEventListener("keydown", event => {
-  if (event.key === "ArrowLeft" || event.key.toLowerCase() === "a") {
-    move(-1);
-  }
-  if (event.key === "ArrowRight" || event.key.toLowerCase() === "d") {
-    move(1);
-  }
-  if (event.code === "Space" || event.key === "ArrowUp") {
-    event.preventDefault();
-    jump();
-  }
-});
-
-window.addEventListener("resize", positionDoll);
-positionDoll();
+  $("startScreen").classList.remove("hidden");
+ }
+};
+placeDoll();
 </script>
 </body>
 </html>
